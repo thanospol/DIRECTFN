@@ -29,7 +29,7 @@ initial examples how to use the library in your own code.
 
 ## Compilation
 
-The provided static library and examples can be compiled using [make](https://www.gnu.org/software/make/) utility. Therefore, it requires Windows users to have some Linux-like environment, such as [Cygwin](https://www.cygwin.com/) or [MinGW](http://www.mingw.org/). However, the other possible option is to use [nmake](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx) utility from Visual Studio (see [`Compilation with nmake`](#Compilation-with-nmake)). 
+The provided static library and examples can be compiled using [make](https://www.gnu.org/software/make/) utility. Therefore, it requires Windows users to have some Linux-like environment, such as [Cygwin](https://www.cygwin.com/) or [MinGW](http://www.mingw.org/). However, the other possible option is to use [nmake](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx) utility from Visual Studio (see [`Compilation with nmake`](#compilation-with-nmake)). 
 
 The following steps are necessary for compilation:
 
@@ -66,7 +66,7 @@ built in the static library file `libdirectfn.a`).
 You can change the name in `./settings/Makefile.in` by defining
 `DIRECTFN_LIB_NAME` variable.
 
-# Compilation-with-nmake
+# compilation-with-nmake
 
 In order to enable working with the [nmake](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx) utility, we provide also special makefiles for it, since the syntax is slightly different from the one that [make](https://www.gnu.org/software/make/) uses. To compile the source code with nmake you should do the following simple steps:
 
