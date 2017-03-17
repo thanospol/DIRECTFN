@@ -137,7 +137,7 @@ then type the name of the executable file
 ``` 
 It will create a file `Results_<test_name>.txt` with timings and errors, and you can  open `Examples.ipynb` notebook and visualize the results by executing the corresponding cell. Note that to run the .ipynb file you need [ipython](https://ipython.org/) to be installed.
 
-* The other way is to use Matlab scripts. To do this, you first need to build the mex interface to C++ functions by going to the [`./mex`](/mex) folder and executing the `build.m` script. After that, you can go to the folder [`./examples/EuCap2017_Examples/matlab/`](/examples/EuCap2017_Examples/matlab/) or [`./examples/Full_Paper_Examples/matlab/`](github/examples/Full_Paper_Examples/matlab/) and run any `test_name.m` script and it will do all the computations and produce the error plots and timings automatically.
+* The other way is to use Matlab scripts. To do this, you first need to build the mex interface to C++ functions by going to the [`./mex`](/mex) folder and executing the `build.m` script. After that, you can go to the folder [`./examples/EuCap2017_Examples/matlab/`](/examples/EuCap2017_Examples/matlab/) or [`./examples/Full_Paper_Examples/matlab/`](/examples/Full_Paper_Examples/matlab/) and run any `test_name.m` script and it will do all the computations and produce the error plots and timings automatically.
 * Note that if you're going to build mex files with one of the standart Windows compiler, e.g., provided by Visual Studio, you should build the static library with Windows compiler as well, i.e., using [`nmake`](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx).
 
 
