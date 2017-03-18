@@ -29,7 +29,7 @@ initial examples how to use the library in your own code.
 
 ## Compilation
 
-The provided static library and examples can be compiled using [make](https://www.gnu.org/software/make/) utility. Therefore, it requires Windows users to have some Linux-like environment, such as [Cygwin](https://www.cygwin.com/) or [MinGW](http://www.mingw.org/). However, the other possible option is to use [nmake](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx) utility from Visual Studio (see [Compilation with nmake](## Compilation with nmake)). 
+The provided static library and examples can be compiled using [make](https://www.gnu.org/software/make/) utility. Therefore, it requires Windows users to have some Linux-like environment, such as [Cygwin](https://www.cygwin.com/) or [MinGW](http://www.mingw.org/). However, the other possible option is to use [nmake](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx) utility from Visual Studio (see [`Compilation with nmake`](#compilation-with-nmake)). 
 
 The following steps are necessary for compilation:
 
@@ -60,18 +60,18 @@ or
 ```
  make CPU=your_cpu_alias
 ```
-This command will compile the code and move the static library into the [`./lib`](github/lib) folder.
+This command will compile the code and move the static library into the [`./lib`](/lib) folder.
 Default name for the library is `directfn` (thus, it will be compiled and 
 built in the static library file `libdirectfn.a`).
 You can change the name in `./settings/Makefile.in` by defining
 `DIRECTFN_LIB_NAME` variable.
 
-## Compilation with nmake
+# compilation-with-nmake
 
 In order to enable working with the [nmake](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx) utility, we provide also special makefiles for it, since the syntax is slightly different from the one that [make](https://www.gnu.org/software/make/) uses. To compile the source code with nmake you should do the following simple steps:
 
- * The folder [`./lib/win/`](github/lib/win) contains the Visual Studio project file to build the static library.
- * To compile the examples run the [Developer Command Prompt for Visual Studio](https://msdn.microsoft.com/en-us/library/ms229859(v=vs.110).aspx) or Visual Studio x86(x64) Native Tools, change the folder to [`.examples/<Paper Name>/c++`] and type
+ * The folder [`./lib/win/`](/lib/win) contains the Visual Studio project file to build the static library.
+ * To compile the examples run the [Developer Command Prompt for Visual Studio](https://msdn.microsoft.com/en-us/library/ms229859(v=vs.110).aspx) or Visual Studio x86(x64) Native Tools, change the folder to `.examples/<Paper Name>/c++` and type
 
 ```
 nmake -f Makefile_win
@@ -137,7 +137,7 @@ then type the name of the executable file
 ``` 
 It will create a file `Results_<test_name>.txt` with timings and errors, and you can  open `Examples.ipynb` notebook and visualize the results by executing the corresponding cell. Note that to run the .ipynb file you need [ipython](https://ipython.org/) to be installed.
 
-* The other way is to use Matlab scripts. To do this, you first need to build the mex interface to C++ functions by going to the [`./mex`](/mex) folder and executing the `build.m` script. After that, you can go to the folder [`./examples/EuCap2017_Examples/matlab/`](/examples/EuCap2017_Examples/matlab/) or [`./examples/Full_Paper_Examples/matlab/`](github/examples/Full_Paper_Examples/matlab/) and run any `test_name.m` script and it will do all the computations and produce the error plots and timings automatically.
+* The other way is to use Matlab scripts. To do this, you first need to build the mex interface to C++ functions by going to the [`./mex`](/mex) folder and executing the `build.m` script. After that, you can go to the folder [`./examples/EuCap2017_Examples/matlab/`](/examples/EuCap2017_Examples/matlab/) or [`./examples/Full_Paper_Examples/matlab/`](/examples/Full_Paper_Examples/matlab/) and run any `test_name.m` script and it will do all the computations and produce the error plots and timings automatically.
 * Note that if you're going to build mex files with one of the standart Windows compiler, e.g., provided by Visual Studio, you should build the static library with Windows compiler as well, i.e., using [`nmake`](https://msdn.microsoft.com/en-us/library/dd9y37ha.aspx).
 
 
