@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.24)  16 MAR 2017 15:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9) (preloaded format=pdflatex 2016.8.24)  18 MAR 2017 14:38
 entering extended mode
 **./ReadMe_DIRECTFN.tex
 (ReadMe_DIRECTFN.tex
@@ -518,11 +518,11 @@ File: images/VA_quad_geom.jpg Graphic file (type jpg)
 Package pdftex.def Info: images/VA_quad_geom.jpg used on input line 266.
 (pdftex.def)             Requested size: 217.66211pt x 153.76018pt.
 Package epstopdf Info: Source file: <images/ST_curv_geom_quad.eps>
-(epstopdf)                    date: 2017-02-20 12:51:31
+(epstopdf)                    date: 2017-02-20 10:51:31
 (epstopdf)                    size: 118462 bytes
 (epstopdf)             Output file: <images/ST_curv_geom_quad-eps-converted-to.
 pdf>
-(epstopdf)                    date: 2017-02-20 12:51:37
+(epstopdf)                    date: 2017-02-20 10:51:37
 (epstopdf)                    size: 5005 bytes
 (epstopdf)             Command: <epstopdf --outfile=images/ST_curv_geom_quad-ep
 s-converted-to.pdf images/ST_curv_geom_quad.eps>
@@ -537,11 +537,11 @@ Package pdftex.def Info: images/ST_curv_geom_quad-eps-converted-to.pdf used on
 input line 271.
 (pdftex.def)             Requested size: 96.73788pt x 101.03822pt.
 Package epstopdf Info: Source file: <images/EA_curv_geom_quad.eps>
-(epstopdf)                    date: 2017-02-20 13:21:08
+(epstopdf)                    date: 2017-02-20 11:21:08
 (epstopdf)                    size: 138026 bytes
 (epstopdf)             Output file: <images/EA_curv_geom_quad-eps-converted-to.
 pdf>
-(epstopdf)                    date: 2017-02-20 13:21:14
+(epstopdf)                    date: 2017-02-20 11:21:14
 (epstopdf)                    size: 6404 bytes
 (epstopdf)             Command: <epstopdf --outfile=images/EA_curv_geom_quad-ep
 s-converted-to.pdf images/EA_curv_geom_quad.eps>
@@ -556,11 +556,11 @@ Package pdftex.def Info: images/EA_curv_geom_quad-eps-converted-to.pdf used on
 input line 273.
 (pdftex.def)             Requested size: 145.11053pt x 92.66328pt.
 Package epstopdf Info: Source file: <images/VA_curv_geom_quad.eps>
-(epstopdf)                    date: 2017-02-20 13:20:01
+(epstopdf)                    date: 2017-02-20 11:20:01
 (epstopdf)                    size: 135013 bytes
 (epstopdf)             Output file: <images/VA_curv_geom_quad-eps-converted-to.
 pdf>
-(epstopdf)                    date: 2017-02-20 13:21:14
+(epstopdf)                    date: 2017-02-20 11:21:14
 (epstopdf)                    size: 6459 bytes
 (epstopdf)             Command: <epstopdf --outfile=images/VA_curv_geom_quad-ep
 s-converted-to.pdf images/VA_curv_geom_quad.eps>
@@ -592,10 +592,10 @@ el$[]$PlanarVectorWS>
 [6 <./images/ST_curv_geom_quad-eps-converted-to.pdf> <./images/EA_curv_geom_qua
 d-eps-converted-to.pdf> <./images/VA_curv_geom_quad-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <images/EA_tri_geom.eps>
-(epstopdf)                    date: 2017-02-17 20:01:17
+(epstopdf)                    date: 2017-02-17 18:01:17
 (epstopdf)                    size: 91287 bytes
 (epstopdf)             Output file: <images/EA_tri_geom-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-02-17 20:01:17
+(epstopdf)                    date: 2017-02-17 18:01:17
 (epstopdf)                    size: 6803 bytes
 (epstopdf)             Command: <epstopdf --outfile=images/EA_tri_geom-eps-conv
 erted-to.pdf images/EA_tri_geom.eps>
@@ -610,10 +610,10 @@ Package pdftex.def Info: images/EA_tri_geom-eps-converted-to.pdf used on input
 line 405.
 (pdftex.def)             Requested size: 120.92421pt x 187.09033pt.
 Package epstopdf Info: Source file: <images/VA_tri_geom.eps>
-(epstopdf)                    date: 2017-02-17 20:01:17
+(epstopdf)                    date: 2017-02-17 18:01:17
 (epstopdf)                    size: 111750 bytes
 (epstopdf)             Output file: <images/VA_tri_geom-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-02-17 20:01:17
+(epstopdf)                    date: 2017-02-17 18:01:17
 (epstopdf)                    size: 7149 bytes
 (epstopdf)             Command: <epstopdf --outfile=images/VA_tri_geom-eps-conv
 erted-to.pdf images/VA_tri_geom.eps>
@@ -692,7 +692,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 590.
 Here is how much of TeX's memory you used:
  8547 strings out of 493334
  123046 string characters out of 3136672
- 229622 words of memory out of 3000000
+ 228622 words of memory out of 3000000
  11886 multiletter control sequences out of 15000+200000
  11576 words of font info for 44 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -713,7 +713,7 @@ X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
 nts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
 s/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on ReadMe_DIRECTFN.pdf (11 pages, 3345253 bytes).
+Output written on ReadMe_DIRECTFN.pdf (11 pages, 3345306 bytes).
 PDF statistics:
  341 PDF objects out of 1000 (max. 8388607)
  65 named destinations out of 1000 (max. 500000)
