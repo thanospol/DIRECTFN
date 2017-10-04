@@ -151,3 +151,13 @@ Propag.*, vol. 61, no. 6, pp. 3112–3122, Jun. 2013.
 
 [2] A. A. Tambova, M. S. Litsarev, G. D. Guryev, and A. G. Polimeridis, "On the generalization of DIRECTFN for singular integrals over quadrilateral patches", *IEEE Trans. Antennas
 Propag.*, (submitted), [arXiv:1703.08146 [physics.comp-ph]](https://arxiv.org/abs/1703.08146).
+
+## License
+
+Copyright © 2016 Athanasios Polimeridis
+
+DIRECTFN is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License (LGPL) as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+
+DIRECTFN is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU GPLv3 for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this program. If not, see [http://www.gnu.org/licenses/].
