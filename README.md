@@ -150,4 +150,4 @@ of singular integrals in Galerkin SIE methods,” *IEEE Trans. Antennas
 Propag.*, vol. 61, no. 6, pp. 3112–3122, Jun. 2013.
 
 [2] A. A. Tambova, M. S. Litsarev, G. D. Guryev, and A. G. Polimeridis, "On the generalization of DIRECTFN for singular integrals over quadrilateral patches", *IEEE Trans. Antennas
-Propag.*, (submitted).
+Propag.*, (submitted), [arXiv:1703.08146 [physics.comp-ph]](https://arxiv.org/abs/1703.08146).
