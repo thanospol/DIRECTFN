@@ -6,7 +6,7 @@ LOCAL_LIB_NAME = $(DIRECTFN_LIB_NAME).$(SO)
 
 all: allobj stalib
 
-allobj: directfn_algorithm_ea.($obj) directfn_algorithm_st.($obj) directfn_algorithm_va.($obj) directfn_common.($obj) directfn_contour.($obj) directfn_gl_1d.($obj) directfn_greenfunc.($obj) directfn_interface.($obj) directfn_kernel_arrsum.($obj) directfn_kernel_base.($obj) directfn_kernel_quad_geom.($obj) directfn_kernel_quad_scal.($obj) directfn_kernel_quad_vect.($obj) directfn_kernel_tri.($obj) directfn_quad.($obj) directfn_triag.($obj)
+allobj: directfn_algorithm_ea.($obj) directfn_algorithm_st.($obj) directfn_algorithm_va.($obj) directfn_common.($obj) directfn_contour.($obj) directfn_gl_1d.($obj) directfn_greenfunc.($obj) directfn_interface.($obj) directfn_kernel_arrsum.($obj) directfn_kernel_base.($obj) directfn_kernel_quad_geom.($obj) directfn_kernel_quad_scal.($obj) directfn_kernel_quad_vect.($obj) directfn_kernel_tri.($obj) directfn_quad.($obj) directfn_quadratures.($obj) directfn_triag.($obj)
 
 directfn_algorithm_ea.($obj): directfn_algorithm_ea.cpp
 	$(CompCXX)  -c $(FlagsCXX) $(INCL_PATH) directfn_algorithm_ea.cpp
@@ -53,6 +53,9 @@ directfn_kernel_tri.($obj): directfn_kernel_tri.cpp
 directfn_quad.($obj): directfn_quad.cpp
 	$(CompCXX)  -c $(FlagsCXX) $(INCL_PATH) directfn_quad.cpp
 
+directfn_quadratures.($obj): directfn_quadratures.cpp
+	$(CompCXX)  -c $(FlagsCXX) $(INCL_PATH) directfn_quadratures.cpp
+
 directfn_triag.($obj): directfn_triag.cpp
 	$(CompCXX)  -c $(FlagsCXX) $(INCL_PATH) directfn_triag.cpp
 
@@ -73,6 +76,7 @@ stalib:
 		directfn_kernel_quad_vect.$(obj) \
 		directfn_kernel_tri.$(obj) \
 		directfn_quad.$(obj) \
+		directfn_quadratures.$(obj) \
 		directfn_triag.$(obj)
 		
 	cd ../lib/win

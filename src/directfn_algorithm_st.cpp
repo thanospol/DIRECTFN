@@ -15,9 +15,9 @@ namespace Directfn {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-DirectfnAlgorithm_ST<ParticularKernel>::DirectfnAlgorithm_ST():
-DirectfnInterface<ParticularKernel>(),
+template <typename ParticularKernel, typename ParticularQuadrature>
+DirectfnAlgorithm_ST<ParticularKernel,  ParticularQuadrature>::DirectfnAlgorithm_ST():
+DirectfnInterface<ParticularKernel, ParticularQuadrature>(),
 sin_PSI_(0.0),
 cos_PSI_(0.0),
 t_Eta_2_(0.0),
@@ -30,21 +30,21 @@ pf_etalim_crnt_(nullptr) {
 }
 
 //virtual
-template <typename ParticularKernel>
-DirectfnAlgorithm_ST<ParticularKernel>::~DirectfnAlgorithm_ST() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+DirectfnAlgorithm_ST<ParticularKernel,  ParticularQuadrature>::~DirectfnAlgorithm_ST() {
 }
 
 //virtual
-template <typename ParticularKernel>
-void  DirectfnAlgorithm_ST<ParticularKernel>::precompute_psi_trigonomety_(const double t_Psi) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>::precompute_psi_trigonomety_(const double t_Psi) noexcept {
 
     sin_PSI_ = sin(t_Psi);
     cos_PSI_ = cos(t_Psi);
 }
 
 //virtual
-template <typename ParticularKernel>
-void DirectfnAlgorithm_ST<ParticularKernel>::do_I_surface_surface_() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_ST<ParticularKernel,  ParticularQuadrature>::do_I_surface_surface_() {
 
     // Preliminarily routine
     init_Isub_();
@@ -100,8 +100,8 @@ void DirectfnAlgorithm_ST<ParticularKernel>::do_I_surface_surface_() {
     gather_Iss_();  // Iss_[i] and Iss_tot
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_ST<ParticularKernel>::init_Isub_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>::init_Isub_() noexcept {
 
     const size_t t_ker_sz = this->up_kernel_->size();
 
@@ -113,8 +113,8 @@ void DirectfnAlgorithm_ST<ParticularKernel>::init_Isub_() noexcept {
     }
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_ST<ParticularKernel>::gather_Isub_(const size_t kk) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>::gather_Isub_(const size_t kk) noexcept {
 
     const size_t ker_sz = this->up_kernel_->size();
 
@@ -125,8 +125,8 @@ void DirectfnAlgorithm_ST<ParticularKernel>::gather_Isub_(const size_t kk) noexc
     }
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_ST<ParticularKernel>::gather_Iss_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>::gather_Iss_() noexcept {
 
     const size_t t_ker_sz = this->up_kernel_->size();
 
@@ -143,8 +143,8 @@ void DirectfnAlgorithm_ST<ParticularKernel>::gather_Iss_() noexcept {
 }
 
 //virtual
-template <typename ParticularKernel>
-void DirectfnAlgorithm_ST<ParticularKernel>::calc_n_functions_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>::calc_n_functions_() noexcept {
 
     double Lam_b(0.0);
     setup_lamlim_(t_Eta_2_, Lam_b);  // get Lam_b
@@ -164,8 +164,8 @@ void DirectfnAlgorithm_ST<ParticularKernel>::calc_n_functions_() noexcept {
 }
 
 //virtual
-template <typename ParticularKernel>
-void DirectfnAlgorithm_ST<ParticularKernel>::calc_a_functions_(const double t_Lam) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>::calc_a_functions_(const double t_Lam) noexcept {
 
     // In the loop it takes Time(cos) x N4
     const double cos_PSI = cos_PSI_;
@@ -212,19 +212,32 @@ void DirectfnAlgorithm_ST<ParticularKernel>::calc_a_functions_(const double t_La
 }
 
 // Instantiation of the Triangular Constant Kernels
-template class DirectfnAlgorithm_ST<TriangularKernel_Constant_ST>;
-template class DirectfnAlgorithm_ST<TriangularKernel_Constant_EA>;
-template class DirectfnAlgorithm_ST<TriangularKernel_Constant_VA>;
-template class DirectfnAlgorithm_ST<TriangularKernel_RWG_WS>;
+template class DirectfnAlgorithm_ST<TriangularKernel_Constant_ST, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_ST<TriangularKernel_Constant_EA, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_ST<TriangularKernel_Constant_VA, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_ST<TriangularKernel_RWG_WS, GaussLegendreQuadrature>;
 
 // Instantiation of the Quadrilateral Planar Kernels
-template class DirectfnAlgorithm_ST<QuadrilateralKernel_PlanarScalar>;
-template class DirectfnAlgorithm_ST<QuadrilateralKernel_PlanarVectorWS>;
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_PlanarScalar, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_PlanarVectorWS, GaussLegendreQuadrature>;
 
-template class DirectfnAlgorithm_ST<QuadrilateralKernel_CurvilinearScalar>;
-template class DirectfnAlgorithm_ST<QuadrilateralKernel_CurvilinearVectorWS>;
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_CurvilinearScalar, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_CurvilinearVectorWS, GaussLegendreQuadrature>;
 
 ///////////////////////////////////////////////////////////////////////////////
+
+// Instantiation of the Triangular Constant Kernels
+template class DirectfnAlgorithm_ST<TriangularKernel_Constant_ST, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_ST<TriangularKernel_Constant_EA, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_ST<TriangularKernel_Constant_VA, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_ST<TriangularKernel_RWG_WS, ClenshawCurtisQuadrature>;
+
+// Instantiation of the Quadrilateral Planar Kernels
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_PlanarScalar, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_PlanarVectorWS, ClenshawCurtisQuadrature>;
+
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_CurvilinearScalar, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_ST<QuadrilateralKernel_CurvilinearVectorWS, ClenshawCurtisQuadrature>;
 
 template <typename ParticularKernel>
 Triangular_ST<ParticularKernel>::Triangular_ST():
@@ -243,18 +256,18 @@ pmf_lamlim_crnt_(nullptr) {
     initialize_limit_fptrs_();
 }
 
-template <typename ParticularKernel>
-Triangular_ST<ParticularKernel>::~Triangular_ST() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+Triangular_ST<ParticularKernel, ParticularQuadrature>::~Triangular_ST() {
 }
 
 //virtual
-template <typename ParticularKernel>
-string Triangular_ST<ParticularKernel>::name() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+string Triangular_ST<ParticularKernel, ParticularQuadrature>::name() const noexcept {
     return string("Triangular_ST");
 }
 
-template <typename ParticularKernel>
-void Triangular_ST<ParticularKernel>::allocate_I_vars_() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_ST<ParticularKernel, ParticularQuadrature>::allocate_I_vars_() {
 
     const size_t t_ker_sz = this->up_kernel_->size();
 
@@ -266,8 +279,8 @@ void Triangular_ST<ParticularKernel>::allocate_I_vars_() {
     this->Isd_k_.reset(new dcomplex[sub_ranges_8_()* t_ker_sz]);
 }
 
-template <typename ParticularKernel>
-void Triangular_ST<ParticularKernel>::initialize_limit_fptrs_() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_ST<ParticularKernel, ParticularQuadrature>::initialize_limit_fptrs_() {
 
     // Array of templated function pointers to be used in loops when specialization is impossible
     // (at compile-time moment). That is why we need these wrappers.
@@ -307,111 +320,116 @@ void Triangular_ST<ParticularKernel>::initialize_limit_fptrs_() {
 }
 
 //virtual
-template <typename ParticularKernel>
-size_t Triangular_ST<ParticularKernel>::sub_figures_numb_k_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+size_t Triangular_ST<ParticularKernel, ParticularQuadrature>::sub_figures_numb_k_() const noexcept {
     return sub_figures_3_();
 }
 
 //virtual
-template <typename ParticularKernel>
-size_t Triangular_ST<ParticularKernel>::sub_ranges_numb_m_()  const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+size_t Triangular_ST<ParticularKernel, ParticularQuadrature>::sub_ranges_numb_m_()  const noexcept {
     return sub_ranges_8_();
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_ST<ParticularKernel>::update_subtri_fptrs_(const size_t kk) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_ST<ParticularKernel, ParticularQuadrature>::update_subtri_fptrs_(const size_t kk) noexcept {
     this->pf_subtrg_crnt_ = pf_subtrg_arr_[kk];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_ST<ParticularKernel>::update_psilims_fptrs_N1_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_ST<ParticularKernel, ParticularQuadrature>::update_psilims_fptrs_N1_(const size_t m) noexcept {
     this->pf_psilim_crnt_ = pf_psilim_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_ST<ParticularKernel>::update_etalims_fptrs_N2_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_ST<ParticularKernel, ParticularQuadrature>::update_etalims_fptrs_N2_(const size_t m) noexcept {
     this->pf_etalim_crnt_ = pf_etalim_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_ST<ParticularKernel>::update_lamlims_fptrs_N3_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_ST<ParticularKernel, ParticularQuadrature>::update_lamlims_fptrs_N3_(const size_t m) noexcept {
     this->pmf_lamlim_crnt_ = pmf_lamlim_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-double Triangular_ST<ParticularKernel>::tri_zero_qua_one_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+double Triangular_ST<ParticularKernel, ParticularQuadrature>::tri_zero_qua_one_() const noexcept {
     return 0.0;  // zero is proper value. It is not like
                  // "default" for nothing. For Triangular it is 0. Do not modify it.
 }
 
 //virtual
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::st_make_simplex_(double chi[3], const double eta, const double xi) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::st_make_simplex_(double chi[3], const double eta, const double xi) noexcept {
     triag_st_make_simplex(chi, eta, xi);  // out[3], in, in
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_ST<ParticularKernel>::setup_lamlim_(const double t_Eta_2, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_ST<ParticularKernel, ParticularQuadrature>::setup_lamlim_(const double t_Eta_2, double & Lam_b) const noexcept {
     (this->*pmf_lamlim_crnt_)(t_Eta_2, Lam_b);
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_1_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_1_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = (double(1.0) - Eta) / this->cos_PSI_;
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_2_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_2_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = sqrt(double(3.0)) * (double(1.0) - Eta) / this->sin_PSI_;
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_3_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_3_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = sqrt(double(3.0)) * (double(1.0) - Eta) / this->sin_PSI_;
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_4_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_4_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = -(double(1.0) + Eta) / this->cos_PSI_;
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_5_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_5_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = (double(1.0) - Eta) / this->cos_PSI_;
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_6_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_6_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = sqrt(double(3.0)) * (double(1.0) + Eta) / this->sin_PSI_;
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_7_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_7_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = sqrt(double(3.0)) * (double(1.0) + Eta) / this->sin_PSI_;
 }
 
-template <typename ParticularKernel>
-void  Triangular_ST<ParticularKernel>::triag_st_lam_limits_8_(const double Eta, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Triangular_ST<ParticularKernel, ParticularQuadrature>::triag_st_lam_limits_8_(const double Eta, double & Lam_b) const noexcept {
     Lam_b = -(double(1.0) + Eta) / this->cos_PSI_;
 }
 
 
-template class Triangular_ST<TriangularKernel_Constant_ST>;
-template class Triangular_ST<TriangularKernel_Constant_EA>;
-template class Triangular_ST<TriangularKernel_Constant_VA>;
-template class Triangular_ST<TriangularKernel_RWG_WS>;
+template class Triangular_ST<TriangularKernel_Constant_ST, GaussLegendreQuadrature>;
+template class Triangular_ST<TriangularKernel_Constant_EA, GaussLegendreQuadrature>;
+template class Triangular_ST<TriangularKernel_Constant_VA, GaussLegendreQuadrature>;
+template class Triangular_ST<TriangularKernel_RWG_WS, GaussLegendreQuadrature>;
 
 /////////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-Quadrilateral_ST<ParticularKernel>::Quadrilateral_ST():
-DirectfnAlgorithm_ST<ParticularKernel>(),
+template class Triangular_ST<TriangularKernel_Constant_ST, ClenshawCurtisQuadrature>;
+template class Triangular_ST<TriangularKernel_Constant_EA, ClenshawCurtisQuadrature>;
+template class Triangular_ST<TriangularKernel_Constant_VA, ClenshawCurtisQuadrature>;
+template class Triangular_ST<TriangularKernel_RWG_WS, ClenshawCurtisQuadrature>;
+
+template <typename ParticularKernel, typename ParticularQuadrature>
+Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::Quadrilateral_ST():
+DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>(),
 cos_pi_ms_PSI_(0.0),
 pf_subtrg_arr_{nullptr, nullptr, nullptr, nullptr},
 pf_psilim_arr_{nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
@@ -427,28 +445,28 @@ pmf_lamlim_crnt_(nullptr) {
     initialize_limit_fptrs_();
 }
 
-template <typename ParticularKernel>
-Quadrilateral_ST<ParticularKernel>::~Quadrilateral_ST() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::~Quadrilateral_ST() {
 }
 
 //virtual
-template <typename ParticularKernel>
-string Quadrilateral_ST<ParticularKernel>::name() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+string Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::name() const noexcept {
     return string("Quadrilateral_ST");
 }
 
 //virtual
-template <typename ParticularKernel>
-void  Quadrilateral_ST<ParticularKernel>::precompute_psi_trigonomety_(const double t_Psi) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void  Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::precompute_psi_trigonomety_(const double t_Psi) noexcept {
 
-    DirectfnAlgorithm_ST<ParticularKernel>::precompute_psi_trigonomety_(t_Psi);
+    DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature>::precompute_psi_trigonomety_(t_Psi);
 
     //tan_PSI_ms_05_pi_ = tan(Psi - 0.5 * M_PI);
     cos_pi_ms_PSI_ = cos(M_PI - t_Psi);
 }
 
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::allocate_I_vars_() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::allocate_I_vars_() {
 
     const size_t t_ker_sz = this->up_kernel_->size();
 
@@ -461,16 +479,16 @@ void Quadrilateral_ST<ParticularKernel>::allocate_I_vars_() {
 //    Isd_k_.reset(new dcomplex[sub_ranges_6_() * t_ker_sz]);
 }
 
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::allocate_I_vars_(const size_t t_ker_sz) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::allocate_I_vars_(const size_t t_ker_sz) noexcept {
 
     this->Iss_.reset(new dcomplex[t_ker_sz]);
     this->Isub_.reset (new dcomplex[sub_figures_4_() * t_ker_sz]);
     this->Isd_k_.reset(new dcomplex[sub_ranges_6_() * t_ker_sz]);
 }
 
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::initialize_limit_fptrs_() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::initialize_limit_fptrs_() {
 
     // Array of templated function pointers to be used in loops when specialization is impossible
     // (at compile-time moment). That is why we need these wrappers.
@@ -502,50 +520,50 @@ void Quadrilateral_ST<ParticularKernel>::initialize_limit_fptrs_() {
 }
 
 //virtual
-template <typename ParticularKernel>
-size_t Quadrilateral_ST<ParticularKernel>::sub_figures_numb_k_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+size_t Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::sub_figures_numb_k_() const noexcept {
     return sub_figures_4_();
 }
 
 //virtual
-template <typename ParticularKernel>
-size_t Quadrilateral_ST<ParticularKernel>::sub_ranges_numb_m_()  const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+size_t Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::sub_ranges_numb_m_()  const noexcept {
     return sub_ranges_6_();
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::update_subtri_fptrs_(const size_t kk) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::update_subtri_fptrs_(const size_t kk) noexcept {
     this->pf_subtrg_crnt_ = pf_subtrg_arr_[kk];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::update_psilims_fptrs_N1_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::update_psilims_fptrs_N1_(const size_t m) noexcept {
     this->pf_psilim_crnt_ = pf_psilim_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::update_etalims_fptrs_N2_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::update_etalims_fptrs_N2_(const size_t m) noexcept {
     this->pf_etalim_crnt_ = pf_etalim_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::update_lamlims_fptrs_N3_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::update_lamlims_fptrs_N3_(const size_t m) noexcept {
     this->pmf_lamlim_crnt_ = pmf_lamlim_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-double Quadrilateral_ST<ParticularKernel>::tri_zero_qua_one_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+double Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::tri_zero_qua_one_() const noexcept {
     return 1.0;
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::st_make_simplex_(double chi[3], const double eta, const double xi) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::st_make_simplex_(double chi[3], const double eta, const double xi) noexcept {
 
     chi[0] = eta;
     chi[1] = xi;
@@ -553,40 +571,52 @@ void Quadrilateral_ST<ParticularKernel>::st_make_simplex_(double chi[3], const d
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::setup_lamlim_(const double t_Eta_2, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::setup_lamlim_(const double t_Eta_2, double & Lam_b) const noexcept {
     (this->*pmf_lamlim_crnt_)(t_Eta_2, Lam_b);
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::quad_st_lamlims_12_(const double U_inp, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::quad_st_lamlims_12_(const double U_inp, double & Lam_b) const noexcept {
     Lam_b = (1.0 - U_inp) / this->cos_PSI_;
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::quad_st_lamlims_34_(const double , double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::quad_st_lamlims_34_(const double , double & Lam_b) const noexcept {
     Lam_b = 2.0 / this->sin_PSI_;
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_ST<ParticularKernel>::quad_st_lamlims_56_(const double U_inp, double & Lam_b) const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_ST<ParticularKernel, ParticularQuadrature>::quad_st_lamlims_56_(const double U_inp, double & Lam_b) const noexcept {
     Lam_b = (1.0 + U_inp) / cos_pi_ms_PSI_;
 }
 
 
 // Instantiation of the Quadrilateral Constant Kernels
-template class Quadrilateral_ST<QuadrilateralKernel_PlanarScalar>;
-template class Quadrilateral_ST<QuadrilateralKernel_PlanarVectorWS>;
-template class Quadrilateral_ST<QuadrilateralKernel_PlanarVectorSS>;
+template class Quadrilateral_ST<QuadrilateralKernel_PlanarScalar, GaussLegendreQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_PlanarVectorWS, GaussLegendreQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_PlanarVectorSS, GaussLegendreQuadrature>;
 
-template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearScalar>;
-template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorWS>;
-template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorSS>;
+template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearScalar, GaussLegendreQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorWS, GaussLegendreQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorSS, GaussLegendreQuadrature>;
 
 ///////////////////////////////////////////////////////////////////////////////
+
+// Instantiation of the Quadrilateral Constant Kernels
+template class Quadrilateral_ST<QuadrilateralKernel_PlanarScalar, ClenshawCurtisQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_PlanarVectorWS, ClenshawCurtisQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_PlanarVectorSS, ClenshawCurtisQuadrature>;
+
+template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearScalar, ClenshawCurtisQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorWS, ClenshawCurtisQuadrature>;
+template class Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorSS, ClenshawCurtisQuadrature>;
+
+///////////////////////////////////////////////////////////////////////////////
+
 
 }  // End of the namespace Directfn
 

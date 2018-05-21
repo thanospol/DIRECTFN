@@ -13,9 +13,9 @@ namespace Directfn {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template  <typename ParticularKernel>
-DirectfnAlgorithm_VA<ParticularKernel>::DirectfnAlgorithm_VA():
-DirectfnInterface<ParticularKernel>(),
+template  <typename ParticularKernel, typename ParticularQuadrature>
+DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::DirectfnAlgorithm_VA():
+DirectfnInterface<ParticularKernel, ParticularQuadrature>(),
 pf_theta_p_lim_1_crnt_(nullptr),
 pf_theta_q_lim_2_crnt_(nullptr),
 pf_get_Lp_1_crnt_(nullptr),
@@ -34,13 +34,13 @@ Lp_1_(0.0),
 Lq_2_(0.0) {
 }
 
-template  <typename ParticularKernel>
-DirectfnAlgorithm_VA<ParticularKernel>::~DirectfnAlgorithm_VA() {
+template  <typename ParticularKernel, typename ParticularQuadrature>
+DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::~DirectfnAlgorithm_VA() {
 }
 
 //virtual
-template  <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::do_I_surface_surface_() {
+template  <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::do_I_surface_surface_() {
 
     // Go throw subranges
     for (size_t m = 0; m < sub_ranges_numb_m_(); ++m) {
@@ -100,8 +100,8 @@ void DirectfnAlgorithm_VA<ParticularKernel>::do_I_surface_surface_() {
     gather_Iss_();
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::gather_Iss_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::gather_Iss_() noexcept {
 
     const size_t t_ker_sz = this->up_kernel_->size();
     // Collect sub ranges for each kernel
@@ -117,38 +117,38 @@ void DirectfnAlgorithm_VA<ParticularKernel>::gather_Iss_() noexcept {
 }
 
 //virtual
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::update_theta_p1_trigonometry_(const double Theta_p1) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::update_theta_p1_trigonometry_(const double Theta_p1) noexcept {
 
     sin_Theta_p_1_ = sin(Theta_p1);
     cos_Theta_p_1_ = cos(Theta_p1);
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::update_theta_q2_trigonometry_(const double Theta_q2) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::update_theta_q2_trigonometry_(const double Theta_q2) noexcept {
 
     sin_Theta_q_2_ = sin(Theta_q2);
     cos_Theta_q_2_ = cos(Theta_q2);
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::define_psi_a_psi_b_lamlim3_case_I_1_ (const double atan_Lq_to_Lp) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::define_psi_a_psi_b_lamlim3_case_I_1_ (const double atan_Lq_to_Lp) noexcept {
 
     psi_a_ = 0.0;
     psi_b_ = atan_Lq_to_Lp;
-    pf_crnt_lam_maxlim_ = &DirectfnAlgorithm_VA<ParticularKernel>::lam_lim_b_1_;
+    pf_crnt_lam_maxlim_ = &DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::lam_lim_b_1_;
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::define_psi_a_psi_b_lamlim3_case_II_2_(const double atan_Lq_to_Lp) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::define_psi_a_psi_b_lamlim3_case_II_2_(const double atan_Lq_to_Lp) noexcept {
 
     psi_a_ = atan_Lq_to_Lp;
     psi_b_ = M_PI / 2.0;
-    pf_crnt_lam_maxlim_ = &DirectfnAlgorithm_VA<ParticularKernel>::lam_lim_b_2_;
+    pf_crnt_lam_maxlim_ = &DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::lam_lim_b_2_;
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::calc_I_psi_N3_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::calc_I_psi_N3_() noexcept {
 
     const double psi_plus_ab = 0.5 * (psi_b_ + psi_a_);
     const double psi_mnus_ab = 0.5 * (psi_b_ - psi_a_);
@@ -160,7 +160,7 @@ void DirectfnAlgorithm_VA<ParticularKernel>::calc_I_psi_N3_() noexcept {
     for (size_t n3_psi = 0; n3_psi < this->N3(); ++n3_psi) {
 
         const double t_Psi = psi_mnus_ab * cz3[n3_psi] + psi_plus_ab;
-        update_psi_3_trigonometry_(t_Psi);
+        update_psi_3_trigonometry_(t_Psi);template <typename ParticularKernel, typename ParticularQuadrature>
 
         calc_I_rho_4_();
         this->up_kerSummator_->accumulate_Ilam_3(cw3[n3_psi]);
@@ -168,15 +168,15 @@ void DirectfnAlgorithm_VA<ParticularKernel>::calc_I_psi_N3_() noexcept {
     this->up_kerSummator_->multiply_Ilam_3(psi_mnus_ab);
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::update_psi_3_trigonometry_(const double t_Psi_3) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::update_psi_3_trigonometry_(const double t_Psi_3) noexcept {
 
     cos_Psi_3_ = cos(t_Psi_3);
     sin_Psi_3_ = sin(t_Psi_3);
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::calc_I_rho_4_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::calc_I_rho_4_() noexcept {
 
     const double J_lam = 0.5 * (this->*pf_crnt_lam_maxlim_)();
 
@@ -199,18 +199,18 @@ void DirectfnAlgorithm_VA<ParticularKernel>::calc_I_rho_4_() noexcept {
     this->up_kerSummator_->multiply_Irho_4(sin_Psi_3_ * cos_Psi_3_ * J_lam);
 }
 
-template <typename ParticularKernel>
-double DirectfnAlgorithm_VA<ParticularKernel>::lam_lim_b_1_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+double DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::lam_lim_b_1_() const noexcept {
     return Lp_1_ / cos_Psi_3_;
 }
 
-template <typename ParticularKernel>
-double DirectfnAlgorithm_VA<ParticularKernel>::lam_lim_b_2_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+double DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::lam_lim_b_2_() const noexcept {
     return Lq_2_ / sin_Psi_3_;
 }
 
-template <typename ParticularKernel>
-void DirectfnAlgorithm_VA<ParticularKernel>::calc_pq_simplex_(double xi_p_out[3], double xi_q_out[3],
+template <typename ParticularKernel, typename ParticularQuadrature>
+void DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>::calc_pq_simplex_(double xi_p_out[3], double xi_q_out[3],
                                             const double t_Lam) noexcept {
 
     const double u_eta_p = t_Lam * cos_Psi_3_ * cos_Theta_p_1_ - 1.0;
@@ -225,50 +225,69 @@ void DirectfnAlgorithm_VA<ParticularKernel>::calc_pq_simplex_(double xi_p_out[3]
 }
 
 // Instantiation of the Triangular Constant Kernels
-template class DirectfnAlgorithm_VA<TriangularKernel_Constant_ST>;
-template class DirectfnAlgorithm_VA<TriangularKernel_Constant_EA>;
-template class DirectfnAlgorithm_VA<TriangularKernel_Constant_VA>;
+template class DirectfnAlgorithm_VA<TriangularKernel_Constant_ST, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_Constant_EA, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_Constant_VA, GaussLegendreQuadrature>;
 
-template class DirectfnAlgorithm_VA<TriangularKernel_RWG_WS>;
-template class DirectfnAlgorithm_VA<TriangularKernel_RWG_SS>;
-template class DirectfnAlgorithm_VA<TriangularKernel_nxRWG_SS>;
+template class DirectfnAlgorithm_VA<TriangularKernel_RWG_WS, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_RWG_SS, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_nxRWG_SS, GaussLegendreQuadrature>;
 
 // Instantiation of the Quadrilateral Planar Kernels
-template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarScalar>;
-template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarVectorWS>;
-template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarVectorSS>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarScalar, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarVectorWS, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarVectorSS, GaussLegendreQuadrature>;
 // .. nxRWG?
 
-template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearScalar>;
-template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearVectorWS>;
-template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearVectorSS>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearScalar, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearVectorWS, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearVectorSS, GaussLegendreQuadrature>;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-Triangular_VA<ParticularKernel>::Triangular_VA():
-DirectfnAlgorithm_VA<ParticularKernel>() {
+// Instantiation of the Triangular Constant Kernels
+template class DirectfnAlgorithm_VA<TriangularKernel_Constant_ST, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_Constant_EA, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_Constant_VA, GaussLegendreQuadrature>;
+
+template class DirectfnAlgorithm_VA<TriangularKernel_RWG_WS, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_RWG_SS, GaussLegendreQuadrature>;
+template class DirectfnAlgorithm_VA<TriangularKernel_nxRWG_SS, GaussLegendreQuadrature>;
+
+// Instantiation of the Quadrilateral Planar Kernels
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarScalar, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarVectorWS, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_PlanarVectorSS, ClenshawCurtisQuadrature>;
+// .. nxRWG?
+
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearScalar, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearVectorWS, ClenshawCurtisQuadrature>;
+template class DirectfnAlgorithm_VA<QuadrilateralKernel_CurvilinearVectorSS, ClenshawCurtisQuadrature>;
+
+template <typename ParticularKernel, typename ParticularQuadrature>
+Triangular_VA<ParticularKernel, ParticularQuadrature>::Triangular_VA():
+DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature>() {
 
     // The kernel pointer as well as the kernel-array-summator pointer
-    // has been allocated in the DirectfnInterface<ParticularKernel>
+    // has been allocated in the DirectfnInterface<ParticularKernel, ParticularQuadrature>
 
     // Here the memory for arrays is allocated according to kernel size.
     allocate_I_vars_();
     initialize_limit_fptrs_();
 }
 
-template <typename ParticularKernel>
-Triangular_VA<ParticularKernel>::~Triangular_VA() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+Triangular_VA<ParticularKernel, ParticularQuadrature>::~Triangular_VA() {
 }
 
 //virtual
-template <typename ParticularKernel>
-string Triangular_VA<ParticularKernel>::name() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+string Triangular_VA<ParticularKernel, ParticularQuadrature>::name() const noexcept {
     return string("Triangular_VA_Constant");
 }
 
-template <typename ParticularKernel>
-void Triangular_VA<ParticularKernel>::allocate_I_vars_() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_VA<ParticularKernel, ParticularQuadrature>::allocate_I_vars_() {
 
     const size_t t_ker_sz = this->up_kernel_->size();
     // Allocates the memory according to the bt-type (the kernel length may vary
@@ -278,8 +297,8 @@ void Triangular_VA<ParticularKernel>::allocate_I_vars_() {
     this->Isub_.reset (new dcomplex[sub_figures_1_() * t_ker_sz]);
 }
 
-template <typename ParticularKernel>
-void Triangular_VA<ParticularKernel>::initialize_limit_fptrs_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_VA<ParticularKernel, ParticularQuadrature>::initialize_limit_fptrs_() noexcept {
 
     this->pf_theta_p_lim_1_crnt_ = triag_va_theta_p_limits;
     this->pf_theta_q_lim_2_crnt_ = triag_va_theta_q_limits;
@@ -289,89 +308,99 @@ void Triangular_VA<ParticularKernel>::initialize_limit_fptrs_() noexcept {
 }
 
 //virtual
-template <typename ParticularKernel>
-size_t Triangular_VA<ParticularKernel>::sub_ranges_numb_m_()  const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+size_t Triangular_VA<ParticularKernel, ParticularQuadrature>::sub_ranges_numb_m_()  const noexcept {
     return sub_figures_1_();
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_VA<ParticularKernel>::update_theta_p_lims_N1_fptr_(const size_t ) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_VA<ParticularKernel, ParticularQuadrature>::update_theta_p_lims_N1_fptr_(const size_t ) noexcept {
     // function pointer  pf_theta_p_lim_1_crnt_
     // have been already setup in the constructor. No need to reset.
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_VA<ParticularKernel>::update_theta_q_lims_N2_fptr_(const size_t ) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_VA<ParticularKernel, ParticularQuadrature>::update_theta_q_lims_N2_fptr_(const size_t ) noexcept {
     // function pointer pf_theta_q_lim_2_crnt_
     // have been already setup in the constructor. No need to reset.
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_VA<ParticularKernel>::update_Lp1_fptr_(const size_t ) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_VA<ParticularKernel, ParticularQuadrature>::update_Lp1_fptr_(const size_t ) noexcept {
     // function pointer pf_get_Lp_1_crnt_
     // have been already setup in the constructor. No need to reset.
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_VA<ParticularKernel>::update_Lq2_fptr_(const size_t ) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_VA<ParticularKernel, ParticularQuadrature>::update_Lq2_fptr_(const size_t ) noexcept {
     // function pointer pf_get_Lq_2_crnt_
     // have been already setup in the constructor. No need to reset.
 }
 
 //virtual
-template <typename ParticularKernel>
-double Triangular_VA<ParticularKernel>::unity4_zero3_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+double Triangular_VA<ParticularKernel, ParticularQuadrature>::unity4_zero3_() const noexcept {
     return 0.0;
 }
 
 //virtual
-template <typename ParticularKernel>
-void Triangular_VA<ParticularKernel>::va_make_simplex(double uvxi_p_out[3], const double u_eta_p,
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Triangular_VA<ParticularKernel, ParticularQuadrature>::va_make_simplex(double uvxi_p_out[3], const double u_eta_p,
                                                   const double v_xi_p) const noexcept {
     triag_st_make_simplex(uvxi_p_out, u_eta_p, v_xi_p);   // out[3], in, in
 }
 
 
-template class Triangular_VA<TriangularKernel_Constant_ST>;
-template class Triangular_VA<TriangularKernel_Constant_EA>;
-template class Triangular_VA<TriangularKernel_Constant_VA>;
+template class Triangular_VA<TriangularKernel_Constant_ST, GaussLegendreQuadrature>;
+template class Triangular_VA<TriangularKernel_Constant_EA, GaussLegendreQuadrature>;
+template class Triangular_VA<TriangularKernel_Constant_VA, GaussLegendreQuadrature>;
 
-template class Triangular_VA<TriangularKernel_RWG_WS>;
-template class Triangular_VA<TriangularKernel_RWG_SS>;
-template class Triangular_VA<TriangularKernel_nxRWG_SS>;
+template class Triangular_VA<TriangularKernel_RWG_WS, GaussLegendreQuadrature>;
+template class Triangular_VA<TriangularKernel_RWG_SS, GaussLegendreQuadrature>;
+template class Triangular_VA<TriangularKernel_nxRWG_SS, GaussLegendreQuadrature>;
 
 /////////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-Quadrilateral_VA<ParticularKernel>::Quadrilateral_VA():
-DirectfnInterface<ParticularKernel>(),
+emplate class Triangular_VA<TriangularKernel_Constant_ST, ClenshawCurtisQuadrature>;
+template class Triangular_VA<TriangularKernel_Constant_EA, ClenshawCurtisQuadrature>;
+template class Triangular_VA<TriangularKernel_Constant_VA, ClenshawCurtisQuadrature>;
+
+template class Triangular_VA<TriangularKernel_RWG_WS, ClenshawCurtisQuadrature>;
+template class Triangular_VA<TriangularKernel_RWG_SS, ClenshawCurtisQuadrature>;
+template class Triangular_VA<TriangularKernel_nxRWG_SS, ClenshawCurtisQuadrature>;
+
+/////////////////////////////////////////////////////////////////////////////////
+
+template <typename ParticularKernel, typename ParticularQuadrature>
+Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::Quadrilateral_VA():
+DirectfnInterface<ParticularKernel, ParticularQuadrature>(),
 pF_theta_p_lim1_arr_{nullptr, nullptr, nullptr, nullptr},
 pF_theta_q_lim2_arr_{nullptr, nullptr, nullptr, nullptr},
 pf_Lp_1_arr_{nullptr, nullptr, nullptr, nullptr},
 pf_Lq_2_arr_{nullptr, nullptr, nullptr, nullptr} {
 
     // Initializtion of particular kernels is done in the
-    // DirectfnInterface<ParticularKernel>
+    // DirectfnInterface<ParticularKernel, ParticularQuadrature>
     allocate_I_vars_();
     initialize_limit_fptrs_();
 }
 
-template <typename ParticularKernel>
-Quadrilateral_VA<ParticularKernel>::~Quadrilateral_VA() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::~Quadrilateral_VA() {
 }
 
 //virtual
-template <typename ParticularKernel>
-string Quadrilateral_VA<ParticularKernel>::name() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+string Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::name() const noexcept {
     return string("Quadrilateral_VA");
 }
 
-template <typename ParticularKernel>
-void Quadrilateral_VA<ParticularKernel>::allocate_I_vars_() {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::allocate_I_vars_() {
 
     const size_t t_ker_sz = this->up_kernel_->size();
     // Allocates the memory according to the bt-type (the kernel length may vary
@@ -381,8 +410,8 @@ void Quadrilateral_VA<ParticularKernel>::allocate_I_vars_() {
     this->Isub_.reset (new dcomplex[sub_figures_4_() * t_ker_sz]);
 }
 
-template <typename ParticularKernel>
-void Quadrilateral_VA<ParticularKernel>::initialize_limit_fptrs_() noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::initialize_limit_fptrs_() noexcept {
     // N1
     pF_theta_p_lim1_arr_[0] = quad_va_theta_p_limits<0>;
     pF_theta_p_lim1_arr_[1] = quad_va_theta_p_limits<1>;
@@ -406,44 +435,44 @@ void Quadrilateral_VA<ParticularKernel>::initialize_limit_fptrs_() noexcept {
 }
 
 //virtual
-template <typename ParticularKernel>
-size_t Quadrilateral_VA<ParticularKernel>::sub_ranges_numb_m_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+size_t Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::sub_ranges_numb_m_() const noexcept {
     return sub_figures_4_();
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_VA<ParticularKernel>::update_theta_p_lims_N1_fptr_(const size_t  m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::update_theta_p_lims_N1_fptr_(const size_t  m) noexcept {
     this->pf_theta_p_lim_1_crnt_ = pF_theta_p_lim1_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_VA<ParticularKernel>::update_theta_q_lims_N2_fptr_(const size_t  m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::update_theta_q_lims_N2_fptr_(const size_t  m) noexcept {
     this->pf_theta_q_lim_2_crnt_ = pF_theta_q_lim2_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_VA<ParticularKernel>::update_Lp1_fptr_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::update_Lp1_fptr_(const size_t m) noexcept {
     this->pf_get_Lp_1_crnt_ = pf_Lp_1_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_VA<ParticularKernel>::update_Lq2_fptr_(const size_t m) noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::update_Lq2_fptr_(const size_t m) noexcept {
     this->pf_get_Lq_2_crnt_ = pf_Lq_2_arr_[m];
 }
 
 //virtual
-template <typename ParticularKernel>
-double Quadrilateral_VA<ParticularKernel>::unity4_zero3_() const noexcept {
+template <typename ParticularKernel, typename ParticularQuadrature>
+double Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::unity4_zero3_() const noexcept {
     return 1.0;
 }
 
 //virtual
-template <typename ParticularKernel>
-void Quadrilateral_VA<ParticularKernel>::va_make_simplex(double uvxi_p_out[3], const double u_eta_p,
+template <typename ParticularKernel, typename ParticularQuadrature>
+void Quadrilateral_VA<ParticularKernel, ParticularQuadrature>::va_make_simplex(double uvxi_p_out[3], const double u_eta_p,
                                                                const double v_xi_p) const noexcept {
     uvxi_p_out[0] = u_eta_p;
     uvxi_p_out[1] = v_xi_p;
@@ -452,13 +481,24 @@ void Quadrilateral_VA<ParticularKernel>::va_make_simplex(double uvxi_p_out[3], c
 
 
 // Instantiation of the Quadrilateral Constant Kernels
-template class Quadrilateral_VA<QuadrilateralKernel_PlanarScalar>;
-template class Quadrilateral_VA<QuadrilateralKernel_PlanarVectorWS>;
-template class Quadrilateral_VA<QuadrilateralKernel_PlanarVectorSS>;
+template class Quadrilateral_VA<QuadrilateralKernel_PlanarScalar, GaussLegendreQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_PlanarVectorWS, GaussLegendreQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_PlanarVectorSS, GaussLegendreQuadrature>;
 
-template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearScalar>;
-template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearVectorWS>;
-template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearVectorSS>;
+template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearScalar, GaussLegendreQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearVectorWS, GaussLegendreQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearVectorSS, GaussLegendreQuadrature>;
+
+///////////////////////////////////////////////////////////////////////////////
+
+// Instantiation of the Quadrilateral Constant Kernels
+template class Quadrilateral_VA<QuadrilateralKernel_PlanarScalar, ClenshawCurtisQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_PlanarVectorWS, ClenshawCurtisQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_PlanarVectorSS, ClenshawCurtisQuadrature>;
+
+template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearScalar, ClenshawCurtisQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearVectorWS, ClenshawCurtisQuadrature>;
+template class Quadrilateral_VA<QuadrilateralKernel_CurvilinearVectorSS, ClenshawCurtisQuadrature>;
 
 ///////////////////////////////////////////////////////////////////////////////
 

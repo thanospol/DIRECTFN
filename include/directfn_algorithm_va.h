@@ -8,8 +8,8 @@ namespace Directfn {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class DirectfnAlgorithm_VA : public virtual DirectfnInterface<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class DirectfnAlgorithm_VA : public virtual DirectfnInterface<ParticularKernel, ParticularQuadrature> {
 public:
 
     DirectfnAlgorithm_VA();
@@ -30,7 +30,7 @@ protected:
     /*! Pointer to the current Lq1*/
     pFUN_LpLq       pf_get_Lq_2_crnt_;
     /*! Pointer to the current lam max lim */
-    pMFun_lam4_max<ParticularKernel>  pf_crnt_lam_maxlim_;
+    pMFun_lam4_max<ParticularKernel, ParticularQuadrature>  pf_crnt_lam_maxlim_;
 
     /*! Memory for internal subintegrals */
     unique_ptr<dcomplex []>  Isub_;
@@ -74,8 +74,8 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class Triangular_VA final :  public DirectfnAlgorithm_VA<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class Triangular_VA final :  public DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature> {
 public:
     Triangular_VA();
     ~Triangular_VA();
@@ -105,8 +105,8 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class Quadrilateral_VA : public DirectfnAlgorithm_VA<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class Quadrilateral_VA : public DirectfnAlgorithm_VA<ParticularKernel, ParticularQuadrature> {
 public:
     Quadrilateral_VA();
     ~Quadrilateral_VA();

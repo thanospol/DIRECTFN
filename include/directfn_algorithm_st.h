@@ -3,13 +3,14 @@
 
 #include "directfn_interface.h"
 #include "directfn_common.h"
+#include "directfn_quadratures.h"
 
 namespace Directfn {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class DirectfnAlgorithm_ST : public virtual DirectfnInterface<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class DirectfnAlgorithm_ST : public virtual DirectfnInterface<ParticularKernel, ParticularQuadrature> {
 public:
     DirectfnAlgorithm_ST();
     virtual ~DirectfnAlgorithm_ST();
@@ -76,8 +77,8 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class Triangular_ST final : public DirectfnAlgorithm_ST<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class Triangular_ST final : public DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature> {
 public:
     Triangular_ST();
     ~Triangular_ST();
@@ -139,8 +140,8 @@ private:
 
 /*! \class Quadrilateral_ST   */
 
-template <typename ParticularKernel>
-class Quadrilateral_ST : public DirectfnAlgorithm_ST<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class Quadrilateral_ST : public DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature> {
 public:
 
     Quadrilateral_ST();

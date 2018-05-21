@@ -3,13 +3,14 @@
 
 #include "directfn_interface.h"
 #include "directfn_common.h"
+//#include "directfn_quadratures.h"
 
 namespace Directfn {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class DirectfnAlgorithm_EA : public virtual DirectfnInterface<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class DirectfnAlgorithm_EA : public virtual DirectfnInterface<ParticularKernel, ParticularQuadrature> {
 public:
     DirectfnAlgorithm_EA();
     virtual ~DirectfnAlgorithm_EA();
@@ -39,7 +40,7 @@ protected:
 
     /*! Declaration for reference to member function pointers
      *  to parent class from inherited classes: */
-    friend class Triangular_EA<ParticularKernel>;
+    friend class Triangular_EA<ParticularKernel, ParticularQuadrature>;
 //    friend class Quadrilateral_EA<ParticularKernel>;
 
     /*! n_function with one call of a_function. */
@@ -82,8 +83,8 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class Triangular_EA : public virtual DirectfnAlgorithm_EA<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class Triangular_EA : public virtual DirectfnAlgorithm_EA<ParticularKernel, ParticularQuadrature> {
 public:
 
     Triangular_EA();
@@ -169,8 +170,8 @@ private:
 
 /////////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
-class Quadrilateral_EA : public DirectfnAlgorithm_EA<ParticularKernel> {
+template <typename ParticularKernel, typename ParticularQuadrature>
+class Quadrilateral_EA : public DirectfnAlgorithm_EA<ParticularKernel, ParticularQuadrature> {
 public:
     Quadrilateral_EA();
     virtual ~Quadrilateral_EA();

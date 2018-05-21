@@ -1,204 +1,56 @@
 #include <iostream>
-#include "directfn_ccn_1d.h"
+
+#include "directfn_interface"
+#include "directfn_quadratures.h"
 #include "directfn_common.h"
 
 using  std::cout;
 using  std::endl;
+using  std::min;
 
 namespace Directfn {
 
-	class QuadratureRule {
-	public:
-
-		QuadratureRule();
-		~QuadratureRule();
-
-		QuadratureRule(const QuadratureRule &) = delete;
-		QuadratureRule(QuadratureRule &&) = delete;
-		QuadratureRule & operator = (const QuadratureRule &) = delete;
-		QuadratureRule & operator = (QuadratureRule &&) = delete;
-
-		/*! The wave number is used in the exp(i k R)  */
-		void set_wavenumber(const double k0_inp) noexcept;
-
-		/*! Perfoms computation of the Green function value and saves it.
-		*  In fact, it calls the genuine_value_() routine. */
-		void  precompute(const double Rpq[3]) noexcept;
-
-		/*! Return precomputed value. */
-		dcomplex  value() const noexcept;
-
-		virtual void debug_print() const noexcept;
-
-	protected:
-		/*! The wave number is setup once and for all (but can be changed if needed) */
-		double k0wn_;
-
-	private:
-		/*! Saves the result here */
-		dcomplex precomputed_value_;
-
-		/*! Calls the actual value */
-		virtual dcomplex genuine_value_(const double R) const noexcept = 0;
-	};
-
-	void cc_xw_1d(const int n, double x[], double w[])
-
-		//****************************************************************************80
-		//
-		//    This program computes a nested Clenshaw Curtis quadrature rule
-		//
-		//    The user specifies:
-		//    * N, the number of points in the rule;
-		//    * A, the left endpoint;
-		//    * B, the right endpoint;
-		//    * FILENAME, which defines the output filenames.
-		//
-		//  Licensing:
-		//
-		//    This code is distributed under the GNU LGPL license.
-		//
-		//  Modified:
-		//
-		//    06 March 2011
-		//
-		//  Author:
-		//
-		//    John Burkardt
-		//
-	{
-		double a;
-		double b;
-		string filename;
-		int n;
-		double *r;
-		double *w;
-		double *x;
-		double x_max;
-		double x_min;
-
-		timestamp();
-		cout << "\n";
-		cout << "CCN_RULE\n";
-		cout << "  C++ version\n";
-		cout << "  Compiled on " << __DATE__ << " at " << __TIME__ << ".\n";
-		cout << "\n";
-		cout << "  Compute one of a family of nested Clenshaw Curtis rules\n";
-		cout << "  for approximating\n";
-		cout << "    Integral ( -1 <= x <= +1 ) f(x) dx\n";
-		cout << "  of order N.\n";
-		cout << "\n";
-		cout << "  The user specifies N, A, B and FILENAME.\n";
-		cout << "\n";
-		cout << "  N is the number of points.\n";
-		cout << "  A is the left endpoint.\n";
-		cout << "  B is the right endpoint.\n";
-		cout << "  FILENAME is used to generate 3 files:\n";
-		cout << "    filename_w.txt - the weight file\n";
-		cout << "    filename_x.txt - the abscissa file.\n";
-		cout << "    filename_r.txt - the region file.\n";
-		//
-		//  Get N.
-		//
-		if (1 < argc)
-		{
-			n = atoi(argv[1]);
+	AbstractQuadrature::AbstractQuadrature() :
+		up_points_(nullptr),
+		up_weights_(nullptr), {
 		}
-		else
-		{
-			cout << "\n";
-			cout << "  Enter the value of N (1 or greater)\n";
-			cin >> n;
-		}
-		//
-		//  Get A.
-		//
-		if (2 < argc)
-		{
-			a = atof(argv[2]);
-		}
-		else
-		{
-			cout << "\n";
-			cout << "  Enter the left endpoint A:\n";
-			cin >> a;
-		}
-		//
-		//  Get B.
-		//
-		if (3 < argc)
-		{
-			b = atof(argv[3]);
-		}
-		else
-		{
-			cout << "\n";
-			cout << "  Enter the right endpoint B:\n";
-			cin >> b;
-		}
-		//
-		//  Get FILENAME:
-		//
-		if (4 < argc)
-		{
-			filename = argv[4];
-		}
-		else
-		{
-			cout << "\n";
-			cout << "  Enter FILENAME, the \"root name\" of the quadrature files.\n";
-			cin >> filename;
-		}
-		//
-		//  Input summary.
-		//
-		cout << "\n";
-		cout << "  N = " << n << "\n";
-		cout << "  A = " << a << "\n";
-		cout << "  B = " << b << "\n";
-		cout << "  FILENAME = \"" << filename << "\".\n";
-		//
-		//  Construct the rule.
-		//
-		r = new double[2];
 
-		r[0] = a;
-		r[1] = b;
-
-		x = ccn_compute_points_new(n);
-
-		x_min = -1.0;
-		x_max = +1.0;
-		w = nc_compute_new(n, x_min, x_max, x);
-		//
-		//  Rescale the rule.
-		//
-		rescale(a, b, n, x, w);
-		//
-		//  Output the rule.
-		//
-		rule_write(n, filename, x, w, r);
-		//
-		//  Free memory.
-		//
-		delete[] r;
-		delete[] w;
-		delete[] x;
-		//
-		//  Terminate.
-		//
-		cout << "\n";
-		cout << "CCN_RULE:\n";
-		cout << "  Normal end of execution.\n";
-		cout << "\n";
-		timestamp();
-
-		return 0;
+		AbstractQuadrature::~AbstractQuadrature() {
 	}
-	//****************************************************************************80
 
-	double *ccn_compute_points_new(int n)
+	GaussLegendreQuadrature::GaussLegendreQuadrature() :
+		AbstractQuadrature() {
+	}
 
+	GaussLegendreQuadrature::~GaussLegendreQuadrature() {
+	}
+
+	bool GaussLegendreQuadrature::set_zw_N_(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) const noexcept {
+		up_points_.reset(new double[Nx]);
+		up_weights_.reset(new double[Nx]);
+
+		gl_xw_1d(int(Nx), up_points_.get(), up_weights_.get());
+	}
+
+	ClenshawCurtisQuadrature::ClenshawCurtisQuadrature() :
+		AbstractQuadrature() {
+	}
+
+	ClenshawCurtisQuadrature::~ClenshawCurtisQuadrature() {
+	}
+
+	bool ClenshawCurtisQuadrature::set_zw_N_(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) const noexcept {
+
+		up_points_.reset(new double[Nx]);
+		up_weights_.reset(new double[Nx]);
+
+		ccn_compute_points_new(Nx, up_points_.get());
+		nc_compute_new(Nx, -1., 1., up_points_.get(), up_weights_.get());
+
+	}
+
+	void ClenshawCurtisQuadrature::ccn_compute_points_new(int n, double x[]) 
+	
 		//****************************************************************************80
 		//
 		//  Purpose:
@@ -240,18 +92,14 @@ namespace Directfn {
 		//    Input, int N, the number of elements to compute.
 		//
 		//    Output, double CCN_COMPUTE_POINTS_NEW[N], the elements of the sequence.
-		//
 	{
 		int d;
 		int i;
 		int k;
 		int m;
-		double pi = 3.141592653589793;
 		int td;
 		int tu;
-		double *x;
 
-		x = new double[n];
 		//
 		//  Handle first three entries specially.
 		//
@@ -273,12 +121,12 @@ namespace Directfn {
 		m = 3;
 		d = 2;
 
-		while (m < n)
+		while (m < Nx)
 		{
 			tu = d + 1;
 			td = d - 1;
 
-			k = i4_min(d, n - m);
+			k = min(d, n - m);
 
 			for (i = 1; i <= k; i++)
 			{
@@ -301,7 +149,7 @@ namespace Directfn {
 		//
 		for (i = 0; i < n; i++)
 		{
-			x[i] = cos(x[i] * pi);
+			x[i] = cos(x[i] * M_PI);
 		}
 		x[0] = 0.0;
 
@@ -315,52 +163,9 @@ namespace Directfn {
 			x[2] = +1.0;
 		}
 
-		return x;
 	}
-	//****************************************************************************80
 
-	int i4_min(int i1, int i2)
-
-		//****************************************************************************80
-		//
-		//  Purpose:
-		//
-		//    I4_MIN returns the minimum of two I4's.
-		//
-		//  Licensing:
-		//
-		//    This code is distributed under the GNU LGPL license.
-		//
-		//  Modified:
-		//
-		//    13 October 1998
-		//
-		//  Author:
-		//
-		//    John Burkardt
-		//
-		//  Parameters:
-		//
-		//    Input, int I1, I2, two integers to be compared.
-		//
-		//    Output, int I4_MIN, the smaller of I1 and I2.
-		//
-	{
-		int value;
-
-		if (i1 < i2)
-		{
-			value = i1;
-		}
-		else
-		{
-			value = i2;
-		}
-		return value;
-	}
-	//****************************************************************************80
-
-	double *nc_compute_new(int n, double x_min, double x_max, double x[])
+	void ClenshawCurtisQuadrature::nc_compute_new(int n, double x_min, double x_max, double x[], double w[])
 
 		//****************************************************************************80
 		//
@@ -405,16 +210,14 @@ namespace Directfn {
 		//    Output, double NC_COMPUTE_NEW[N], the weights.
 		//
 	{
-		double *d;
+		unique_ptr<double[]> d;
 		int i;
 		int j;
 		int k;
-		double *w;
 		double yvala;
 		double yvalb;
 
-		d = new double[n];
-		w = new double[n];
+		d.reset(new double[n]);
 
 		for (i = 0; i < n; i++)
 		{
@@ -464,15 +267,16 @@ namespace Directfn {
 			w[i] = yvalb - yvala;
 		}
 
-		delete[] d;
-
-		return w;
 	}
-	//****************************************************************************80
 
+} // End of DIRECTFN namespace
+
+		
+
+	/****************************************************************************
 	void r8mat_write(string output_filename, int m, int n, double table[])
 
-		//****************************************************************************80
+		//****************************************************************************
 		//
 		//  Purpose:
 		//
@@ -697,4 +501,5 @@ namespace Directfn {
 		return;
 # undef TIME_SIZE
 	}
-}
+	*/
+

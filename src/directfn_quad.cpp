@@ -4,7 +4,7 @@ namespace Directfn {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
+template <typename ParticularKernel, typename ParticularQuadrature>
 int directfn_quad_st_plan(const double r1[3], const double r2[3],
                           const double r3[3], const double r4[3],
                           const size_t N1, const size_t N2,
@@ -15,7 +15,7 @@ int directfn_quad_st_plan(const double r1[3], const double r2[3],
     static SingularContour3xn cntr4p;
     cntr4p.set_points(r1, r2, r3, r4);
 
-    static std::unique_ptr<Quadrilateral_ST<ParticularKernel>> up_quad_st(new Quadrilateral_ST<ParticularKernel>());
+    static std::unique_ptr<Quadrilateral_ST<ParticularKernel, ParticularQuadrature>> up_quad_st(new Quadrilateral_ST<ParticularKernel, ParticularQuadrature>());
     up_quad_st->set_wavenumber(k0wn);
     up_quad_st->set_Gaussian_orders_4(N1, N2, N3, N4);
     up_quad_st->set(cntr4p);
@@ -47,7 +47,7 @@ template int directfn_quad_st_plan<QuadrilateralKernel_PlanarVectorWS>(const dou
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
+template <typename ParticularKernel, typename ParticularQuadrature>
 int directfn_quad_ea_plan(const double r1[3], const double r2[3],
                           const double r3[3], const double r4[3],
                           const double r5[3], const double r6[3],
@@ -59,7 +59,7 @@ int directfn_quad_ea_plan(const double r1[3], const double r2[3],
     static SingularContour3xn cntr6p;
     cntr6p.set_points(r1, r2, r3, r4, r5, r6);
 
-    static std::unique_ptr<Quadrilateral_EA<ParticularKernel>> up_quad_ea(new Quadrilateral_EA<ParticularKernel>());
+    static std::unique_ptr<Quadrilateral_EA<ParticularKernel, ParticularQuadrature>> up_quad_ea(new Quadrilateral_EA<ParticularKernel, ParticularQuadrature>());
     up_quad_ea->set_wavenumber(k0wn);
     up_quad_ea->set_Gaussian_orders_4(N1, N2, N3, N4);
     up_quad_ea->set(cntr6p);
@@ -77,21 +77,21 @@ int directfn_quad_ea_plan(const double r1[3], const double r2[3],
 
 
 // Instantiation
-template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarScalar>(const double [3], const double [3],
+template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarScalar, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                      const double [3], const double [3],
                                                                      const double [3], const double [3],
                                                                      const size_t , const size_t ,
                                                                      const size_t , const size_t ,
                                                                      const double , dcomplex * const );
 
-template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarVectorWS>(const double [3], const double [3],
+template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarVectorWS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const size_t , const size_t ,
                                                                        const size_t , const size_t ,
                                                                        const double , dcomplex * const );
 
-template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarVectorSS>(const double [3], const double [3],
+template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarVectorSS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const size_t , const size_t ,
@@ -100,7 +100,30 @@ template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarVectorSS>(const dou
 
 /////////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
+template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarScalar, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarVectorWS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_ea_plan<QuadrilateralKernel_PlanarVectorSS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+/////////////////////////////////////////////////////////////////////////////////
+
+template <typename ParticularKernel, typename ParticularQuadrature>
 int directfn_quad_va_plan(const double r1[3], const double r2[3],
                           const double r3[3], const double r4[3],
                           const double r5[3], const double r6[3],
@@ -113,7 +136,7 @@ int directfn_quad_va_plan(const double r1[3], const double r2[3],
     static SingularContour3xn cntr7p;
     cntr7p.set_points(r1, r2, r3, r4, r5, r6, r7);
 
-    static std::unique_ptr<Quadrilateral_VA<ParticularKernel>> up_quad_va(new Quadrilateral_VA<ParticularKernel>());
+    static std::unique_ptr<Quadrilateral_VA<ParticularKernel, ParticularQuadrature>> up_quad_va(new Quadrilateral_VA<ParticularKernel, ParticularQuadrature>());
     up_quad_va->set_wavenumber(k0wn);
     up_quad_va->set_Gaussian_orders_4(N1, N2, N3, N4);
     up_quad_va->set(cntr7p);
@@ -131,7 +154,7 @@ int directfn_quad_va_plan(const double r1[3], const double r2[3],
 
 
 // Instantiation
-template int directfn_quad_va_plan<QuadrilateralKernel_PlanarScalar>(const double [3], const double [3],
+template int directfn_quad_va_plan<QuadrilateralKernel_PlanarScalar, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                      const double [3], const double [3],
                                                                      const double [3], const double [3],
                                                                      const double [3],
@@ -139,7 +162,7 @@ template int directfn_quad_va_plan<QuadrilateralKernel_PlanarScalar>(const doubl
                                                                      const size_t , const size_t ,
                                                                      const double , dcomplex * const );
 
-template int directfn_quad_va_plan<QuadrilateralKernel_PlanarVectorWS>(const double [3], const double [3],
+template int directfn_quad_va_plan<QuadrilateralKernel_PlanarVectorWS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const double [3],
@@ -147,17 +170,42 @@ template int directfn_quad_va_plan<QuadrilateralKernel_PlanarVectorWS>(const dou
                                                                        const size_t , const size_t ,
                                                                        const double , dcomplex * const );
 
-template int directfn_quad_va_plan<QuadrilateralKernel_PlanarVectorSS>(const double [3], const double [3],
+template int directfn_quad_va_plan<QuadrilateralKernel_PlanarVectorSS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const double [3], const double [3],
                                                                        const double [3],
                                                                        const size_t , const size_t ,
                                                                        const size_t , const size_t ,
                                                                        const double , dcomplex * const );
+
+
+template int directfn_quad_va_plan<QuadrilateralKernel_PlanarScalar, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_va_plan<QuadrilateralKernel_PlanarVectorWS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_va_plan<QuadrilateralKernel_PlanarVectorSS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
+template <typename ParticularKernel, typename ParticularQuadrature>
 int directfn_quad_st_curv(const double r1[3], const double r2[3],
                           const double r3[3], const double r4[3],
                           const double r5[3], const double r6[3],
@@ -171,7 +219,7 @@ int directfn_quad_st_curv(const double r1[3], const double r2[3],
     static SingularContour3xn cntr9p;
     cntr9p.set_points(r1, r2, r3, r4, r5, r6, r7, r8, r9);
 
-    static std::unique_ptr<Quadrilateral_ST<ParticularKernel>> up_quad_st(new Quadrilateral_ST<ParticularKernel>());
+    static std::unique_ptr<Quadrilateral_ST<ParticularKernel, ParticularQuadrature>> up_quad_st(new Quadrilateral_ST<ParticularKernel, ParticularQuadrature>());
     up_quad_st->set_wavenumber(k0wn);
     up_quad_st->set_Gaussian_orders_4(N1, N2, N3, N4);
     up_quad_st->set(cntr9p);
@@ -189,7 +237,7 @@ int directfn_quad_st_curv(const double r1[3], const double r2[3],
 
 
 // Instantiation
-template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearScalar>(const double [3], const double [3],
+template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearScalar, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                           const double [3], const double [3],
                                                                           const double [3], const double [3],
                                                                           const double [3], const double [3],
@@ -198,7 +246,7 @@ template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearScalar>(const 
                                                                           const size_t , const size_t ,
                                                                           const double , dcomplex * const);
 
-template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearVectorWS>(const double [3], const double [3],
+template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearVectorWS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
@@ -209,7 +257,27 @@ template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearVectorWS>(cons
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
+template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearScalar, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_st_curv<QuadrilateralKernel_CurvilinearVectorWS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename ParticularKernel, typename ParticularQuadrature>
 int directfn_quad_ea_curv(const double r1[3],  const double r2[3],
                           const double r3[3],  const double r4[3],
                           const double r5[3],  const double r6[3],
@@ -226,7 +294,7 @@ int directfn_quad_ea_curv(const double r1[3],  const double r2[3],
     static SingularContour3xn cntr15p;
     cntr15p.set_points(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15);
 
-    static std::unique_ptr<Quadrilateral_EA<ParticularKernel>> up_quad_ea(new Quadrilateral_EA<ParticularKernel>());
+    static std::unique_ptr<Quadrilateral_EA<ParticularKernel, ParticularQuadrature>> up_quad_ea(new Quadrilateral_EA<ParticularKernel, ParticularQuadrature>());
     up_quad_ea->set_wavenumber(k0);
     up_quad_ea->set_Gaussian_orders_4(N1, N2, N3, N4);
     up_quad_ea->set(cntr15p);
@@ -243,7 +311,7 @@ int directfn_quad_ea_curv(const double r1[3],  const double r2[3],
 }
 
 // Instantiation
-template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearScalar>(const double [3], const double [3],
+template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearScalar, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                           const double [3], const double [3],
                                                                           const double [3], const double [3],
                                                                           const double [3], const double [3],
@@ -255,7 +323,7 @@ template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearScalar>(const 
                                                                           const size_t , const size_t ,
                                                                           const double , dcomplex * const );
 
-template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorWS>(const double [3], const double [3],
+template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorWS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
@@ -267,7 +335,7 @@ template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorWS>(cons
                                                                             const size_t , const size_t ,
                                                                             const double , dcomplex * const );
 
-template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorSS>(const double [3], const double [3],
+template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorSS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
@@ -281,7 +349,45 @@ template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorSS>(cons
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel>
+template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearScalar, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorWS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_ea_curv<QuadrilateralKernel_CurvilinearVectorSS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename ParticularKernel, typename ParticularQuadrature>
 int directfn_quad_va_curv(const double r1[3],  const double r2[3],
                           const double r3[3],  const double r4[3],
                           const double r5[3],  const double r6[3],
@@ -299,7 +405,7 @@ int directfn_quad_va_curv(const double r1[3],  const double r2[3],
     static SingularContour3xn cntr17p;
     cntr17p.set_points(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17);
 
-    static std::unique_ptr<Quadrilateral_VA<ParticularKernel>> up_quad_va(new Quadrilateral_VA<ParticularKernel>());
+    static std::unique_ptr<Quadrilateral_VA<ParticularKernel, ParticularQuadrature>> up_quad_va(new Quadrilateral_VA<ParticularKernel, ParticularQuadrature>());
     up_quad_va->set_wavenumber(k0);
     up_quad_va->set_Gaussian_orders_4(N1, N2, N3, N4);
     up_quad_va->set(cntr17p);
@@ -317,7 +423,7 @@ int directfn_quad_va_curv(const double r1[3],  const double r2[3],
 
 
 // Instantiation
-template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearScalar>(const double [3], const double [3],
+template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearScalar, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                           const double [3], const double [3],
                                                                           const double [3], const double [3],
                                                                           const double [3], const double [3],
@@ -330,7 +436,7 @@ template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearScalar>(const 
                                                                           const size_t , const size_t ,
                                                                           const double , dcomplex * const);
 
-template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorWS>(const double [3], const double [3],
+template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorWS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
@@ -343,7 +449,7 @@ template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorWS>(cons
                                                                             const size_t , const size_t ,
                                                                             const double , dcomplex * const);
 
-template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorSS>(const double [3], const double [3],
+template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorSS, GaussLegendreQuadrature>(const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
                                                                             const double [3], const double [3],
@@ -355,6 +461,47 @@ template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorSS>(cons
                                                                             const size_t , const size_t ,
                                                                             const size_t , const size_t ,
                                                                             const double , dcomplex * const);
+
+///////////////////////////////////////////////////////////////////////////////
+
+template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearScalar, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorWS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
+
+template int directfn_quad_va_curv<QuadrilateralKernel_CurvilinearVectorSS, ClenshawCurtisQuadrature>(const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3], const double[3],
+	const double[3],
+	const size_t, const size_t,
+	const size_t, const size_t,
+	const double, dcomplex * const);
 
 ///////////////////////////////////////////////////////////////////////////////
 
