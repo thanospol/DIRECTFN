@@ -8,7 +8,8 @@ namespace Directfn {
 QuadrilateralKernel_Scalar::QuadrilateralKernel_Scalar():
 QuadrilateralKernel(),
 jacobian_(0.0) {
-    up_green_func_.reset(new HelmgolzGreenFunc());
+    //up_green_func_.reset(new HelmgolzGreenFunc());
+	up_green_func_.reset(new GradHelmgolzGreenFunc());
 }
 
 //virtual

@@ -1,0 +1,40 @@
+ROOT_DIR = ../../../
+
+include ../../../settings/Makefile.nmake_win
+
+INCL_PATH = -I../../../include
+LIB_PATH = ../../../lib/win
+LOCAL_LIB_NAME = $(DIRECTFN_LIB_NAME).$(SO)
+
+
+all: allobj allexe
+
+allobj: st_curv_strongly_singular.$(obj) \
+		st_planar_strongly_singular.$(obj) \
+		st_triag_SS.$(obj)
+	
+allexe: st_curv_strongly_singular.$(exe) \
+		st_planar_strongly_singular.$(exe) \
+		st_triag_SS.$(exe)
+	
+st_curv_strongly_singular.$(obj): st_curv_strongly_singular.cpp
+	$(CompCXX) -c $(FlagsCXX) $(INCL_PATH) st_curv_strongly_singular.cpp
+
+st_planar_strongly_singular.$(obj): st_planar_strongly_singular.cpp
+	$(CompCXX) -c $(FlagsCXX) $(INCL_PATH) st_planar_strongly_singular.cpp
+
+st_triag_SS.$(obj): st_triag_SS.cpp
+	$(CompCXX) -c $(FlagsCXX) $(INCL_PATH) st_triag_SS.cpp
+
+
+st_curv_strongly_singular.$(exe): st_curv_strongly_singular.obj
+	 link $(FlagsAR) /LIBPATH:$(LIB_PATH) st_curv_strongly_singular.obj $(LOCAL_LIB_NAME)
+
+st_planar_strongly_singular.$(exe): st_planar_strongly_singular.obj
+	 link $(FlagsAR) /LIBPATH:$(LIB_PATH) st_planar_strongly_singular.obj $(LOCAL_LIB_NAME)
+
+st_triag_SS.$(exe): st_triag_SS.obj
+	 link $(FlagsAR) /LIBPATH:$(LIB_PATH) st_triag_SS.obj $(LOCAL_LIB_NAME)
+
+clean:
+	 del *.obj *.exe

@@ -158,7 +158,8 @@ double TriangularKernel::calc_local_Jacobian_() noexcept {
 TriangularKernel_Constant::TriangularKernel_Constant():
 TriangularKernel(),
 jacobian_(0.0) {
-    up_green_func_.reset(new HelmgolzGreenFunc());
+    //up_green_func_.reset(new HelmgolzGreenFunc());
+	up_green_func_.reset(new user_GreenFunc());
 }
 
 //virtual
