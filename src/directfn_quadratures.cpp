@@ -1,6 +1,6 @@
 #include <iostream>
-
-#include "directfn_interface"
+#include <algorithm>
+#include "directfn_interface.h"
 #include "directfn_quadratures.h"
 #include "directfn_common.h"
 
@@ -10,268 +10,295 @@ using  std::min;
 
 namespace Directfn {
 
-	AbstractQuadrature::AbstractQuadrature() :
-		up_points_(nullptr),
-		up_weights_(nullptr), {
-		}
+AbstractQuadrature::AbstractQuadrature() {
+}
 
-		AbstractQuadrature::~AbstractQuadrature() {
-	}
+AbstractQuadrature::~AbstractQuadrature() {
+}
 
-	GaussLegendreQuadrature::GaussLegendreQuadrature() :
-		AbstractQuadrature() {
-	}
 
-	GaussLegendreQuadrature::~GaussLegendreQuadrature() {
-	}
+/////////////////////////////////////////////////////////////////////////////////////
 
-	bool GaussLegendreQuadrature::set_zw_N_(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) const noexcept {
-		up_points_.reset(new double[Nx]);
-		up_weights_.reset(new double[Nx]);
 
-		gl_xw_1d(int(Nx), up_points_.get(), up_weights_.get());
-	}
+GaussLegendreQuadrature::GaussLegendreQuadrature() :
+AbstractQuadrature() {
+}
 
-	ClenshawCurtisQuadrature::ClenshawCurtisQuadrature() :
-		AbstractQuadrature() {
-	}
+GaussLegendreQuadrature::~GaussLegendreQuadrature() {
+}
 
-	ClenshawCurtisQuadrature::~ClenshawCurtisQuadrature() {
-	}
+bool GaussLegendreQuadrature::set_zw_N(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) noexcept {
 
-	bool ClenshawCurtisQuadrature::set_zw_N_(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) const noexcept {
+	gl_xw_1d(int(Nx), p_z1.get(), p_w1.get());
 
-		up_points_.reset(new double[Nx]);
-		up_weights_.reset(new double[Nx]);
+	return true;
+}
 
-		ccn_compute_points_new(Nx, up_points_.get());
-		nc_compute_new(Nx, -1., 1., up_points_.get(), up_weights_.get());
 
-	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void ClenshawCurtisQuadrature::ccn_compute_points_new(int n, double x[]) 
-	
-		//****************************************************************************80
-		//
-		//  Purpose:
-		//
-		//    CCN_COMPUTE_POINTS: compute Clenshaw Curtis Nested points.
-		//
-		//  Discussion:
-		//
-		//    We want to compute the following sequence:
-		//
-		//    1/2,
-		//    0, 1
-		//    1/4, 3/4
-		//    1/8, 3/8, 5/8, 7/8,
-		//    1/16, 3/16, 5/16, 7/16, 9/16, 11/16, 13/16, 15/16, and so on.
-		//
-		//    But we would prefer that the numbers in each row be regrouped in pairs
-		//    that are symmetric about 1/2, with the number above 1/2 coming first.
-		//    Thus, the last row might become:
-		//    (9/16, 7/16), (11/16, 5/16), ..., (15/16, 1/16).
-		//
-		//    Once we have our sequence, we apply the Chebyshev transformation
-		//    which maps [0,1] to [-1,+1].
-		//
-		//  Licensing:
-		//
-		//    This code is distributed under the GNU LGPL license.
-		//
-		//  Modified:
-		//
-		//    06 March 2011
-		//
-		//  Author:
-		//
-		//    John Burkardt
-		//
-		//  Parameters:
-		//
-		//    Input, int N, the number of elements to compute.
-		//
-		//    Output, double CCN_COMPUTE_POINTS_NEW[N], the elements of the sequence.
-	{
-		int d;
-		int i;
-		int k;
-		int m;
-		int td;
-		int tu;
-
-		//
-		//  Handle first three entries specially.
-		//
-		if (1 <= n)
-		{
-			x[0] = 0.5;
-		}
-
-		if (2 <= n)
-		{
-			x[1] = 1.0;
-		}
-
-		if (3 <= n)
-		{
-			x[2] = 0.0;
-		}
-
-		m = 3;
-		d = 2;
-
-		while (m < Nx)
-		{
-			tu = d + 1;
-			td = d - 1;
-
-			k = min(d, n - m);
-
-			for (i = 1; i <= k; i++)
-			{
-				if ((i % 2) == 1)
-				{
-					x[m + i - 1] = tu / 2.0 / (double)(k);
-					tu = tu + 2;
-				}
-				else
-				{
-					x[m + i - 1] = td / 2.0 / (double)(k);
-					td = td - 2;
-				}
-			}
-			m = m + k;
-			d = d * 2;
-		}
-		//
-		//  Apply the Chebyshev transformation.
-		//
-		for (i = 0; i < n; i++)
-		{
-			x[i] = cos(x[i] * M_PI);
-		}
-		x[0] = 0.0;
-
-		if (2 <= n)
-		{
-			x[1] = -1.0;
-		}
-
-		if (3 <= n)
-		{
-			x[2] = +1.0;
-		}
-
-	}
-
-	void ClenshawCurtisQuadrature::nc_compute_new(int n, double x_min, double x_max, double x[], double w[])
-
-		//****************************************************************************80
-		//
-		//  Purpose:
-		//
-		//    NC_COMPUTE_NEW computes a Newton-Cotes quadrature rule.
-		//
-		//  Discussion:
-		//
-		//    For the interval [X_MIN,X_MAX], the Newton-Cotes quadrature rule
-		//    estimates
-		//
-		//      Integral ( X_MIN <= X <= X_MAX ) F(X) dX
-		//
-		//    using N abscissas X and weights W:
-		//
-		//      Sum ( 1 <= I <= N ) W(I) * F ( X(I) ).
-		//
-		//    For the CLOSED rule, the abscissas include the end points.
-		//    For the OPEN rule, the abscissas do not include the end points.
-		//
-		//  Licensing:
-		//
-		//    This code is distributed under the GNU LGPL license.
-		//
-		//  Modified:
-		//
-		//    17 November 2009
-		//
-		//  Author:
-		//
-		//    John Burkardt
-		//
-		//  Parameters:
-		//
-		//    Input, int N, the order.
-		//
-		//    Input, double X_MIN, X_MAX, the endpoints of the interval.
-		//
-		//    Input, double X[N], the abscissas.
-		//
-		//    Output, double NC_COMPUTE_NEW[N], the weights.
-		//
-	{
-		unique_ptr<double[]> d;
-		int i;
-		int j;
-		int k;
-		double yvala;
-		double yvalb;
-
-		d.reset(new double[n]);
-
-		for (i = 0; i < n; i++)
-		{
-			//
-			//  Compute the Lagrange basis polynomial which is 1 at XTAB(I),
-			//  and zero at the other nodes.
-			//
-			for (j = 0; j < n; j++)
-			{
-				d[j] = 0.0;
-			}
-			d[i] = 1.0;
-
-			for (j = 2; j <= n; j++)
-			{
-				for (k = j; k <= n; k++)
-				{
-					d[n + j - k - 1] = (d[n + j - k - 1 - 1] - d[n + j - k - 1]) / (x[n + 1 - k - 1] - x[n + j - k - 1]);
-				}
-			}
-
-			for (j = 1; j <= n - 1; j++)
-			{
-				for (k = 1; k <= n - j; k++)
-				{
-					d[n - k - 1] = d[n - k - 1] - x[n - k - j] * d[n - k];
-				}
-			}
-			//
-			//  Evaluate the antiderivative of the polynomial at the left and
-			//  right endpoints.
-			//
-			yvala = d[n - 1] / (double)(n);
-			for (j = n - 2; 0 <= j; j--)
-			{
-				yvala = yvala * x_min + d[j] / (double)(j + 1);
-			}
-			yvala = yvala * x_min;
-
-			yvalb = d[n - 1] / (double)(n);
-			for (j = n - 2; 0 <= j; j--)
-			{
-				yvalb = yvalb * x_max + d[j] / (double)(j + 1);
-			}
-			yvalb = yvalb * x_max;
-
-			w[i] = yvalb - yvala;
-		}
-
-	}
+//ClenshawCurtisQuadrature::ClenshawCurtisQuadrature() :
+//AbstractQuadrature() {
+//}
+//
+//ClenshawCurtisQuadrature::~ClenshawCurtisQuadrature() {
+//}
+//
+//bool ClenshawCurtisQuadrature::set_zw_N(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) noexcept {
+//
+//
+//	if (!ccn_compute_points_weights(Nx, p_z1.get(), p_w1.get())) {
+//		cout << "Error in setting Gaussian points and weights! " << endl;
+//		return false;
+//	}
+//	cout << " CC points & weightss computed! " << endl;
+//	return true;
+//}
+//
+//bool ClenshawCurtisQuadrature::ccn_compute_points_weights( int n, double x[], double w[]) noexcept {
+//	
+//		//****************************************************************************80
+//		//
+//		//  Purpose:
+//		//
+//		//    CCN_COMPUTE_POINTS: compute Clenshaw Curtis Nested points.
+//		//
+//		//  Discussion:
+//		//
+//		//    We want to compute the following sequence:
+//		//
+//		//    1/2,
+//		//    0, 1
+//		//    1/4, 3/4
+//		//    1/8, 3/8, 5/8, 7/8,
+//		//    1/16, 3/16, 5/16, 7/16, 9/16, 11/16, 13/16, 15/16, and so on.
+//		//
+//		//    But we would prefer that the numbers in each row be regrouped in pairs
+//		//    that are symmetric about 1/2, with the number above 1/2 coming first.
+//		//    Thus, the last row might become:
+//		//    (9/16, 7/16), (11/16, 5/16), ..., (15/16, 1/16).
+//		//
+//		//    Once we have our sequence, we apply the Chebyshev transformation
+//		//    which maps [0,1] to [-1,+1].
+//		//
+//		//  Licensing:
+//		//
+//		//    This code is distributed under the GNU LGPL license.
+//		//
+//		//  Modified:
+//		//
+//		//    06 March 2011
+//		//
+//		//  Author:
+//		//
+//		//    John Burkardt
+//		//
+//		//  Parameters:
+//		//
+//		//    Input, int N, the number of elements to compute.
+//		//
+//		//    Output, double CCN_COMPUTE_POINTS_NEW[N], the elements of the sequence.
+//	int d;
+//	int k;
+//	int m;
+//	int td;
+//	int tu;
+//
+//		//
+//		//  Handle first three entries specially.
+//		//
+//	if (1 <= n)
+//		{
+//			x[0] = 0.5;
+//		}
+//
+//		if (2 <= n)
+//		{
+//			x[1] = 1.0;
+//		}
+//
+//		if (3 <= n)
+//		{
+//			x[2] = 0.0;
+//		}
+//
+//		m = 3;
+//		d = 2;
+//
+//		while (m < n)
+//		{
+//			tu = d + 1;
+//			td = d - 1;
+//
+//			k = min(d, n - m);
+//
+//			for (int i = 1; i <= k; i++)
+//			{
+//				if ((i % 2) == 1)
+//				{
+//					x[m + i - 1] = tu / 2.0 / (double)(k);
+//					tu = tu + 2;
+//				}
+//				else
+//				{
+//					x[m + i - 1] = td / 2.0 / (double)(k);
+//					td = td - 2;
+//				}
+//			}
+//			m = m + k;
+//			d = d * 2;
+//		}
+//		//
+//		//  Apply the Chebyshev transformation.
+//		//
+//		for (int i = 0; i < n; i++)
+//		{
+//			x[i] = cos(x[i] * M_PI);
+//		}
+//		x[0] = 0.0;
+//
+//		if (2 <= n)
+//		{
+//			x[1] = -1.0;
+//		}
+//
+//		if (3 <= n)
+//		{
+//			x[2] = +1.0;
+//		}
+//
+//
+//		//****************************************************************************80
+//		//
+//		//  Purpose:
+//		//
+//		//    NC_COMPUTE_NEW computes a Newton-Cotes quadrature rule.
+//		//
+//		//  Discussion:
+//		//
+//		//    For the interval [X_MIN,X_MAX], the Newton-Cotes quadrature rule
+//		//    estimates
+//		//
+//		//      Integral ( X_MIN <= X <= X_MAX ) F(X) dX
+//		//
+//		//    using N abscissas X and weights W:
+//		//
+//		//      Sum ( 1 <= I <= N ) W(I) * F ( X(I) ).
+//		//
+//		//    For the CLOSED rule, the abscissas include the end points.
+//		//    For the OPEN rule, the abscissas do not include the end points.
+//		//
+//		//  Licensing:
+//		//
+//		//    This code is distributed under the GNU LGPL license.
+//		//
+//		//  Modified:
+//		//
+//		//    17 November 2009
+//		//
+//		//  Author:
+//		//
+//		//    John Burkardt
+//		//
+//		//  Parameters:
+//		//
+//		//    Input, int N, the order.
+//		//
+//		//    Input, double X_MIN, X_MAX, the endpoints of the interval.
+//		//
+//		//    Input, double X[N], the abscissas.
+//		//
+//		//    Output, double NC_COMPUTE_NEW[N], the weights.
+//		//
+//
+//	//unique_ptr<double[]> d(new double[n]);;
+//	double *dd;
+//	dd = new double[n];
+//	double x_min = -1.0;
+//	double x_max = 1.0;
+//	double yvala;
+//	double yvalb;
+//
+//
+//	for (int i = 0; i < n; i++)
+//	{
+//			//
+//			//  Compute the Lagrange basis polynomial which is 1 at XTAB(I),
+//			//  and zero at the other nodes.
+//			//
+//			for (int j = 0; j < n; j++)
+//			{
+//				dd[j] = 0.0;
+//			}
+//			dd[i] = 1.0;
+//
+//			for (int j = 2; j <= n; j++)
+//			{
+//				for (int k = j; k <= n; k++)
+//				{
+//					dd[n + j - k - 1] = (dd[n + j - k - 1 - 1] - dd[n + j - k - 1]) / (x[n + 1 - k - 1] - x[n + j - k - 1]);
+//				}
+//			}
+//
+//			for (int j = 1; j <= n - 1; j++)
+//			{
+//				for (int k = 1; k <= n - j; k++)
+//				{
+//					dd[n - k - 1] = dd[n - k - 1] - x[n - k - j] * dd[n - k];
+//				}
+//			}
+//			//
+//			//  Evaluate the antiderivative of the polynomial at the left and
+//			//  right endpoints.
+//			//
+//			yvala = dd[n - 1] / n;
+//			for (int j = 0; j < n; j++)
+//			{
+//				cout << dd[j] << endl;
+//			}
+//			//cout << yvala << endl;
+//			for (int j = n - 2; 0 <= j; j--)
+//			{
+//				yvala = yvala * x_min + dd[j] / (j + 1);
+//			}
+//			yvala = yvala * x_min;
+//
+//			yvalb = dd[n - 1] / n;
+//			for (int j = n - 2; 0 <= j; j--)
+//			{
+//				yvalb = yvalb * x_max + dd[j] / (j + 1);
+//			}
+//			yvalb = yvalb * x_max;
+//
+//			w[i] = yvalb - yvala;
+//
+//			//for (int num = 0; num < n; num++)
+//			//{
+//				//cout << w[num] << endl;
+//			//}
+//	}
+//	delete [] dd;
+//	return true;
+//
+//}
+//
 
 } // End of DIRECTFN namespace
 
 		
+
+
+//-------------------------------------------------------------------------------
+// End of the file
+
+
+
+
+
+
+
+
+
 
 	/****************************************************************************
 	void r8mat_write(string output_filename, int m, int n, double table[])

@@ -9,8 +9,8 @@ namespace Directfn {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel, typename ParticularQuadrature>
-class DirectfnAlgorithm_ST : public virtual DirectfnInterface<ParticularKernel, ParticularQuadrature> {
+template <typename ParticularKernel>
+class DirectfnAlgorithm_ST : public virtual DirectfnInterface<ParticularKernel> {
 public:
     DirectfnAlgorithm_ST();
     virtual ~DirectfnAlgorithm_ST();
@@ -77,8 +77,8 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel, typename ParticularQuadrature>
-class Triangular_ST final : public DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature> {
+template <typename ParticularKernel>
+class Triangular_ST final : public DirectfnAlgorithm_ST<ParticularKernel> {
 public:
     Triangular_ST();
     ~Triangular_ST();
@@ -140,8 +140,8 @@ private:
 
 /*! \class Quadrilateral_ST   */
 
-template <typename ParticularKernel, typename ParticularQuadrature>
-class Quadrilateral_ST : public DirectfnAlgorithm_ST<ParticularKernel, ParticularQuadrature> {
+template <typename ParticularKernel>
+class Quadrilateral_ST : public DirectfnAlgorithm_ST<ParticularKernel> {
 public:
 
     Quadrilateral_ST();

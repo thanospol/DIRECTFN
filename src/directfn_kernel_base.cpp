@@ -16,6 +16,7 @@ namespace Directfn {
 
 AbstractKernel::AbstractKernel():
 up_green_func_(nullptr),
+up_quadrature_(nullptr),
 rp_crnt_{0.0, 0.0, 0.0},
 rq_crnt_{0.0, 0.0, 0.0},
 Rpq_{0.0, 0.0, 0.0} {
@@ -43,6 +44,18 @@ void AbstractKernel::precompute_rp_rq_data() noexcept {
     }
     up_green_func_->precompute(Rpq_);
     precompute_rp_rq_dependent_data_();
+}
+
+bool AbstractKernel::set_zw_N(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) noexcept {
+
+	if (nullptr == up_quadrature_.get()) {
+		cout << "AbstractKernel::setting points and weights Error! " << endl;
+		cout << "up_quadrature_ is not initialized!... " << endl << endl;
+		return false;
+	}
+	p_z1.reset(new double[Nx]);
+	p_w1.reset(new double[Nx]);
+	return up_quadrature_->set_zw_N(int(Nx), p_z1, p_w1);
 }
 
 dcomplex AbstractKernel::value(const size_t index) const noexcept {

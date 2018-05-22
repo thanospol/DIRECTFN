@@ -7,7 +7,6 @@
 #include "directfn_kernel_arrsum.h"
 #include "directfn_contour.h"
 #include "directfn_defs.h"
-#include "directfn_quadratures.h"
 
 using std::string;
 using std::unique_ptr;
@@ -26,7 +25,7 @@ class AbstractQuadrature;
  *
  *  Interface for directfn
  */
-template <typename ParticularKernel, typename ParticularQuadrature>
+template <typename ParticularKernel>
 class DirectfnInterface {
 public:
     /*! Default constructor: all containers are of zero size,
@@ -74,14 +73,9 @@ public:
     /*! \return kernel pointer to setup parametric kernel properly */
     ParticularKernel * kernel_ptr() noexcept;
 
-	/*! \return quadrature pointer to setup quadrature rule properly */
-	ParticularQuadrature * quadrature_ptr() noexcept;
-
     /*! The constant string name of the kernel needed usually for debug */
     virtual string name() const noexcept = 0;
 
-	/*! The constant string name of the kernel needed usually for debug */
-	virtual string quadrature_name() const noexcept = 0;
 
     virtual void debug_print() const noexcept;
 
@@ -92,8 +86,6 @@ protected:
     /*! Summarize integral values over rho_4, lam_3, eta_2 in kernel_sz loop */
     unique_ptr<KernelArrayInterface<ParticularKernel>>  up_kerSummator_;
 
-	/*! Quadrature pointers will be allocated in the specialized constructors */
-	unique_ptr<ParticularQuadrature> up_quadrature_;
 
     /*! Pointers to arrays of points and weights for Gaussian quadratures. */
     unique_ptr<double []>  up_w1_;
@@ -120,7 +112,7 @@ private:
 
     /*! Auxiliarily routine for Gauss-Legandre nodes setup */
     //bool set_zw_N_(const size_t Nx, unique_ptr<double []> & p_z1, unique_ptr<double []> & p_w1);
-	virtual bool set_zw_N_() noexcept = 0;
+	//virtual bool set_zw_N_(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) noexcept = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

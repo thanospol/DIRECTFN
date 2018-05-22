@@ -10,6 +10,8 @@
 #include "directfn_algorithm_va.h"
 #include "directfn_kernel_quad_scal.h"
 #include "directfn_kernel_tri.h"
+#include "directfn_quadratures.h"
+#include "directfn_interface.h"
 
 using  std::cout;
 using  std::endl;
@@ -26,6 +28,7 @@ using Directfn::dcomplex;
 using Directfn::QuadrilateralKernel_PlanarScalar;
 //using Directfn::TriangularKernel_Constant_ST;
 //using Directfn::TriangularKernel_Constant_EA;
+using Directfn::AbstractQuadrature;
 
 
 #ifndef M_PI
@@ -41,7 +44,7 @@ using Directfn::DBL_EPSILON;
     const double k0wn = 2 * M_PI;
     
     const double d = 0.1;
-	const size_t  N_ref = 32;
+	const size_t  N_ref = 30;
 
 	const double r1[] = { 0.0 , 0.4*d , 0.0 };
 	const double r2[] = { d , 0.0 , 0.0 };

@@ -19,7 +19,7 @@ namespace Directfn {
 
 /*! cp_data must be allocated before input pass */
 
-template <typename ParticularKernel, typename ParticularQuadrature>
+template <typename ParticularKernel>
 int directfn_tri_st_plan(const double r1[3], const double r2[3], const double r3[3],
                          const size_t N1, const size_t N2,
                          const size_t N3, const size_t N4,
@@ -27,7 +27,7 @@ int directfn_tri_st_plan(const double r1[3], const double r2[3], const double r3
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel, typename ParticularQuadrature>
+template <typename ParticularKernel>
 int directfn_tri_ea_plan(const double r1[3], const double r2[3],
                          const double r3[3], const double r4[3],
                          const size_t N1, const size_t N2,
@@ -36,7 +36,7 @@ int directfn_tri_ea_plan(const double r1[3], const double r2[3],
 
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename ParticularKernel, typename ParticularQuadrature>
+template <typename ParticularKernel>
 int directfn_tri_va_plan(const double r1[3], const double r2[3],
                          const double r3[3], const double r4[3],
                          const double r5[3],

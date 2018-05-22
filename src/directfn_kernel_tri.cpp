@@ -158,8 +158,9 @@ double TriangularKernel::calc_local_Jacobian_() noexcept {
 TriangularKernel_Constant::TriangularKernel_Constant():
 TriangularKernel(),
 jacobian_(0.0) {
-    //up_green_func_.reset(new HelmgolzGreenFunc());
-	up_green_func_.reset(new user_GreenFunc());
+    up_green_func_.reset(new HelmgolzGreenFunc());
+	//up_green_func_.reset(new user_GreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 //virtual
@@ -422,6 +423,7 @@ dcomplex TriangularKernel_RWG::specific_value_(const size_t index) const noexcep
 TriangularKernel_RWG_WS::TriangularKernel_RWG_WS():
 TriangularKernel_RWG() {
     up_green_func_.reset(new HelmgolzGreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 TriangularKernel_RWG_WS::~TriangularKernel_RWG_WS() {
@@ -437,6 +439,7 @@ dcomplex TriangularKernel_RWG_WS::rwg_value_() const noexcept {
 TriangularKernel_RWG_SS::TriangularKernel_RWG_SS():
 TriangularKernel_RWG() {
     up_green_func_.reset(new GradHelmgolzGreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 TriangularKernel_RWG_SS::~TriangularKernel_RWG_SS() {
@@ -457,6 +460,7 @@ TriangularKernel_nxRWG_SS::TriangularKernel_nxRWG_SS():
 TriangularKernel_RWG(),
 np_{0.0, 0.0, 0.0} {
     up_green_func_.reset(new GradHelmgolzGreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 TriangularKernel_nxRWG_SS::~TriangularKernel_nxRWG_SS() {

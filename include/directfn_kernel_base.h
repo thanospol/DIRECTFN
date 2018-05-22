@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "directfn_common.h"
+#include "directfn_quadratures.h"
 
 using  std::shared_ptr;
 using  std::unique_ptr;
@@ -10,6 +11,7 @@ using  std::unique_ptr;
 namespace Directfn {
 
 class  AbstractGreenFunc;
+class AbstractQuadrature;
 class  SingularContour3xn;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,12 +58,19 @@ public:
      *  Formal definitions used in inherited classes.*/
     virtual void  set(const SingularContour3xn &  contour_xpts) noexcept = 0;
 
+
     virtual void debug_print() const noexcept = 0;
+
+	/*! Auxiliarily routine for Gauss-Legandre nodes and weights setup */
+	bool set_zw_N(const size_t Nx, unique_ptr<double[]> & p_z1, unique_ptr<double[]> & p_w1) noexcept;
 
 protected:
 
     /*! The green function is initialized in the inherited constructors */
     unique_ptr<AbstractGreenFunc>      up_green_func_;
+
+	/*! The quadrature rule is initialized in the inherited constructors */
+	unique_ptr<AbstractQuadrature>      up_quadrature_;
 
     /*! Parameters of integration rp and rq for Green func */
     double rp_crnt_[3], rq_crnt_[3];
@@ -81,6 +90,7 @@ protected:
 
     /*! Normales are needed for nx basis functions. */
     //virtual void   calc_normales_(); // will be implemented later
+
 
 private:
     /*! Reimplemented in inherited classes */

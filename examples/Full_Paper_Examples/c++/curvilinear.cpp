@@ -35,14 +35,16 @@ using Directfn::M_PI;
 //using Directfn::DBL_EPSILON;
 //#endif
 
+
+// Self-Term Weakly Singular case
 ///////////////////////////////////////////////////////////////////////////////
-void  st_curv() noexcept {
+void  st_curv_WS() noexcept {
 
 	double T;
 	const double k0wn = 2 * M_PI;
 
 	const double d = 0.1;
-	const size_t  N_ref = 20;
+	const size_t  N_ref = 30;
 	const int len = 16;
 
 	double dd = d / sqrt(double(2.0));
@@ -68,38 +70,39 @@ void  st_curv() noexcept {
 
 	Q.set_points(r1, r2, r3, r4, r5, r6, r7, r8, r9);
 
-	unique_ptr<Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorWS>> up_quad_st(new Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorWS>());
+	unique_ptr<Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorWS>> up_quad_st_WS(new Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorWS>());
+
 
 	// Setting parameters
-	up_quad_st->set_wavenumber(k0wn);
-	up_quad_st->set(Q);
-	up_quad_st->set_Gaussian_orders_4(N_ref, N_ref, N_ref, N_ref);
+	up_quad_st_WS->set_wavenumber(k0wn);
+	up_quad_st_WS->set(Q);
+	up_quad_st_WS->set_Gaussian_orders_4(N_ref, N_ref, N_ref, N_ref);
 
 	// Calculating reference value
-	cout << "Computing reference values for ST case..." << endl;
+	cout << "Computing reference values for ST Weakly Singular case..." << endl;
 	std::chrono::steady_clock::time_point  begin_t_quad = std::chrono::steady_clock::now();
-	up_quad_st->calc_Iss();
+	up_quad_st_WS->calc_Iss();
 	std::chrono::steady_clock::time_point  end_t_quad = std::chrono::steady_clock::now();
 
 	T = std::chrono::duration_cast<std::chrono::milliseconds>(end_t_quad - begin_t_quad).count();
 	cout << "Reference values computed in " << T << " milliseconds" << endl;
 
-	up_quad_st->copy_Iss_array_values_to(I_ref_value);
+	up_quad_st_WS->copy_Iss_array_values_to(I_ref_value);
 
 	 // Output reference value
 	cout << "I_ref = ";
-	for (size_t i = 0; i < up_quad_st->kernel_size(); ++i) {
-	cout << setprecision(17) << up_quad_st->Iss_arr(i) << endl;
+	for (size_t i = 0; i < up_quad_st_WS->kernel_size(); ++i) {
+	cout << setprecision(17) << up_quad_st_WS->Iss_arr(i) << endl;
 	}
 	cout << endl;
 	
 
 	std::ofstream myfile;
-	myfile.open("Results_st_curv.txt");
+	myfile.open("Results_st_curv_WS.txt");
 
-	const int Counter = 25;
+	const int Counter = 30;
 
-	cout << "Convergence test starting for ST case..." << endl;
+	cout << "Convergence test starting for ST Weakly Singular  case..." << endl;
 	for (int N = 1; N <= Counter; N++)
 	{
 
@@ -107,9 +110,9 @@ void  st_curv() noexcept {
 		cout << endl;
 
 		// Setting Gaussian orders
-		up_quad_st->set_Gaussian_orders_4(N, N, N, N);
-		up_quad_st->calc_Iss();
-		I_quad = up_quad_st->Iss();
+		up_quad_st_WS->set_Gaussian_orders_4(N, N, N, N);
+		up_quad_st_WS->calc_Iss();
+		I_quad = up_quad_st_WS->Iss();
 
 
 		for (int i = 0; i < len; i++)
@@ -131,6 +134,100 @@ void  st_curv() noexcept {
 
 }
 
+// Self-Term Strongly Singular case
+/////////////////////////////////////////////////////////////////////////////////
+void  st_curv_SS() noexcept {
+
+	double T;
+	const double k0wn = 2 * M_PI;
+
+	const double d = 0.1;
+	const size_t  N_ref = 30;
+	const int len = 16;
+
+	double dd = d / sqrt(double(2.0));
+
+	double r1[] = { d, 0.0, 0.0 };
+	double r2[] = { d, 0.0, 0.5*d };
+	double r3[] = { d, 0.0, d };
+	double r4[] = { dd, dd, 0.0 };
+	double r5[] = { dd, dd, 0.5*d };
+	double r6[] = { dd, dd, d };
+	double r7[] = { 0.0, d, 0.0 };
+	double r8[] = { 0.0, d, 0.5*d };
+	double r9[] = { 0.0, d, d };
+
+	double * Error = new double[len];
+	double max_Error;
+	const dcomplex * I_quad;
+	dcomplex * I_ref_value = new dcomplex[len];
+
+
+
+	SingularContour3xn Q;
+
+	Q.set_points(r1, r2, r3, r4, r5, r6, r7, r8, r9);
+	unique_ptr<Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorSS>> up_quad_st_SS(new Quadrilateral_ST<QuadrilateralKernel_CurvilinearVectorSS>());
+	// Setting parameters
+	up_quad_st_SS->set_wavenumber(k0wn);
+	up_quad_st_SS->set(Q);
+	up_quad_st_SS->set_Gaussian_orders_4(N_ref, N_ref, N_ref, N_ref);
+
+	// Calculating reference value
+	cout << "Computing reference values for ST Strongly Singular case..." << endl;
+	std::chrono::steady_clock::time_point  begin_t_quad = std::chrono::steady_clock::now();
+	up_quad_st_SS->calc_Iss();
+	std::chrono::steady_clock::time_point  end_t_quad = std::chrono::steady_clock::now();
+
+	T = std::chrono::duration_cast<std::chrono::milliseconds>(end_t_quad - begin_t_quad).count();
+	cout << "Reference values computed in " << T << " milliseconds" << endl;
+
+	up_quad_st_SS->copy_Iss_array_values_to(I_ref_value);
+
+	// Output reference value
+	cout << "I_ref = ";
+	for (size_t i = 0; i < up_quad_st_SS->kernel_size(); ++i) {
+		cout << setprecision(17) << up_quad_st_SS->Iss_arr(i) << endl;
+	}
+	cout << endl;
+
+
+	std::ofstream myfile;
+	myfile.open("Results_st_curv_SS.txt");
+
+	const int Counter = 30;
+
+	cout << "Convergence test starting for ST Strongly Singular case..." << endl;
+	for (int N = 1; N <= Counter; N++)
+	{
+
+		cout << "N: " << N << endl;
+		cout << endl;
+
+	// Setting Gaussian orders
+	up_quad_st_SS->set_Gaussian_orders_4(N, N, N, N);
+	up_quad_st_SS->calc_Iss();
+	I_quad = up_quad_st_SS->Iss();
+
+
+	for (int i = 0; i < len; i++)
+	{
+		Error[i] = relative_error(I_quad[i], I_ref_value[i]);
+	}
+
+	max_Error = max_element(Error, len);
+
+
+
+	// Writing results to file
+	myfile << N << " " << setprecision(17) << max_Error << endl;
+	}
+
+myfile.close();
+cout << "Convergence test completed." << endl;
+
+
+}
 
 // Edge adjacent case
 void  ea_curv() noexcept {
@@ -139,7 +236,7 @@ void  ea_curv() noexcept {
 	const double k0wn = 2 * M_PI;
 
 	const double d = 0.1;
-	const size_t  N_ref = 20;
+	const size_t  N_ref = 30;
 	const int len = 16;
 
 	double dd = d / sqrt(double(2.0));
@@ -200,7 +297,7 @@ void  ea_curv() noexcept {
 	std::ofstream myfile;
 	myfile.open("Results_ea_curv.txt");
 
-	const int Counter = 25;
+	const int Counter = 30;
 
 	cout << "Convergence test starting for EA case ..." << endl;
 	for (int N = 1; N <= Counter; N++)
@@ -239,7 +336,7 @@ void  va_curv() noexcept {
 	const double k0wn = 2 * M_PI;
 
 	const double d = 0.1;
-	const size_t  N_ref = 20;
+	const size_t  N_ref = 30;
 	const int len = 16;
 
 	double dd = d / sqrt(double(2.0));
@@ -303,7 +400,7 @@ void  va_curv() noexcept {
 	std::ofstream myfile;
 	myfile.open("Results_va_curv.txt");
 
-	const int Counter = 25;
+	const int Counter = 30;
 
 	cout << "Convergence test starting for VA case ..." << endl;
 	for (int N = 1; N <= Counter; N++)
@@ -337,7 +434,8 @@ void  va_curv() noexcept {
 
 int main(int, char *[]) {
 
-	st_curv();
+	st_curv_WS();
+	st_curv_SS();
 	ea_curv();
 	va_curv();
 

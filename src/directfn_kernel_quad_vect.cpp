@@ -220,6 +220,7 @@ QuadrilateralKernel(),
 QuadrilateralPlanarKernel(),
 QuadrilateralKernel_Vector() {
     up_green_func_.reset(new HelmgolzGreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 //virtual
@@ -238,6 +239,7 @@ QuadrilateralKernel(),
 QuadrilateralPlanarKernel(),
 QuadrilateralKernel_Vector() {
     up_green_func_.reset(new GradHelmgolzGreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 //virtual
@@ -259,6 +261,7 @@ QuadrilateralKernel(),
 QuadrilateralCurvilinearKernel(),
 QuadrilateralKernel_Vector() {
     up_green_func_.reset(new HelmgolzGreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 //virtual
@@ -277,6 +280,7 @@ QuadrilateralKernel(),
 QuadrilateralCurvilinearKernel(),
 QuadrilateralKernel_Vector() {
     up_green_func_.reset(new GradHelmgolzGreenFunc());
+	up_quadrature_.reset(new GaussLegendreQuadrature());
 }
 
 //virtual

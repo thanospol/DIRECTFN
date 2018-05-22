@@ -7,7 +7,8 @@
 #include "directfn_contour.h"
 #include "directfn_algorithm_st.h"
 #include "directfn_kernel_quad_scal.h"
-
+#include "directfn_quadratures.h"
+#include "directfn_interface.h"
 
 using  std::cout;
 using  std::endl;
@@ -17,6 +18,7 @@ using Directfn::Quadrilateral_ST;
 using Directfn::SingularContour3xn;
 using Directfn::dcomplex;
 using Directfn::QuadrilateralKernel_CurvilinearScalar;
+using Directfn::AbstractQuadrature;
 
 using Directfn::relative_error;
 using Directfn::max_element;
@@ -60,13 +62,15 @@ void  st_curv() noexcept {
 	SingularContour3xn Q;
 
 	Q.set_points(r1, r5, r2, r8, r9, r6, r4, r7, r3);
-
+	
 	unique_ptr<Quadrilateral_ST<QuadrilateralKernel_CurvilinearScalar>> up_quad_st(new Quadrilateral_ST<QuadrilateralKernel_CurvilinearScalar>());
-
+	
 	// Setting parameters
 	up_quad_st->set_wavenumber(k0wn);
 	up_quad_st->set(Q);
-	up_quad_st->set_Gaussian_orders_4(N_ref, N_ref, N_ref, N_ref);
+	if(!up_quad_st->set_Gaussian_orders_4(N_ref, N_ref, N_ref, N_ref)) {
+		cout << "Error in setting quadrature points!" << endl;
+	}
 
 	// Calculating reference value
 	cout << "Computing reference values ..." << endl;
@@ -116,7 +120,7 @@ void  st_curv() noexcept {
 
 	myfile.close();
 	cout << "Convergence test completed." << endl;
-
+	
 
 }
 

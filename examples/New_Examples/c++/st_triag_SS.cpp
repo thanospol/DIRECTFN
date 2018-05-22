@@ -10,6 +10,8 @@
 #include "directfn_algorithm_va.h"
 #include "directfn_kernel_quad_scal.h"
 #include "directfn_kernel_tri.h"
+#include "directfn_quadratures.h"
+#include "directfn_interface.h"
 
 using  std::cout;
 using  std::endl;
@@ -26,6 +28,7 @@ using Directfn::dcomplex;
 //using Directfn::QuadrilateralKernel_PlanarScalar;
 using Directfn::TriangularKernel_Constant_ST;
 //using Directfn::TriangularKernel_Constant_EA;
+using Directfn::AbstractQuadrature;
 
 
 #ifndef M_PI
