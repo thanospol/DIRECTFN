@@ -96,6 +96,14 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+class User_GreenFunc final : public AbstractGreenFunc {
+public:
+	User_GreenFunc();
+	virtual ~User_GreenFunc();
+private:
+	virtual dcomplex genuine_value_(const double R) const noexcept;
+};
+
 }  // End of the namespace  Directfn
 
 #endif   //  _DIRECTFN_GREENFUNC_H_

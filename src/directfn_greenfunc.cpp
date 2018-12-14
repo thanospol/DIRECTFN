@@ -131,15 +131,15 @@ dcomplex Grad_G_minus_half_G0_GreenFunc::genuine_value_(const double R) const no
 ///////////////////////////////////////////////////////////////////////////////
 
 
-user_GreenFunc::user_GreenFunc() :
+User_GreenFunc::User_GreenFunc() :
 	AbstractGreenFunc() {
 }
 
-user_GreenFunc::~user_GreenFunc() {
+User_GreenFunc::~User_GreenFunc() {
 }
 
 //virtual
-dcomplex user_GreenFunc::genuine_value_(const double R) const noexcept {
+dcomplex User_GreenFunc::genuine_value_(const double R) const noexcept {
 
 	/* Replace the code below with yours */
 	const dcomplex  G0 = 1.0 / (R*R);
