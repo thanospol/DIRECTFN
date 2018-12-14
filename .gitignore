@@ -4,3 +4,6 @@
 *.lib
 *.exe
 *.pdb
+*.eps
+*.txt
+*.jpg
