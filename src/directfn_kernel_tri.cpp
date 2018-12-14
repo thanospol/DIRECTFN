@@ -158,7 +158,9 @@ double TriangularKernel::calc_local_Jacobian_() noexcept {
 TriangularKernel_Constant::TriangularKernel_Constant():
 TriangularKernel(),
 jacobian_(0.0) {
-    up_green_func_.reset(new HelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new HelmgolzGreenFunc());
+	}
 }
 
 //virtual
@@ -420,7 +422,9 @@ dcomplex TriangularKernel_RWG::specific_value_(const size_t index) const noexcep
 
 TriangularKernel_RWG_WS::TriangularKernel_RWG_WS():
 TriangularKernel_RWG() {
-    up_green_func_.reset(new HelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new HelmgolzGreenFunc());
+	}
 }
 
 TriangularKernel_RWG_WS::~TriangularKernel_RWG_WS() {
@@ -435,7 +439,9 @@ dcomplex TriangularKernel_RWG_WS::rwg_value_() const noexcept {
 
 TriangularKernel_RWG_SS::TriangularKernel_RWG_SS():
 TriangularKernel_RWG() {
-    up_green_func_.reset(new GradHelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new GradHelmgolzGreenFunc());
+	}
 }
 
 TriangularKernel_RWG_SS::~TriangularKernel_RWG_SS() {
@@ -455,7 +461,9 @@ dcomplex TriangularKernel_RWG_SS::rwg_value_() const noexcept {
 TriangularKernel_nxRWG_SS::TriangularKernel_nxRWG_SS():
 TriangularKernel_RWG(),
 np_{0.0, 0.0, 0.0} {
-    up_green_func_.reset(new GradHelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new GradHelmgolzGreenFunc());
+	}
 }
 
 TriangularKernel_nxRWG_SS::~TriangularKernel_nxRWG_SS() {

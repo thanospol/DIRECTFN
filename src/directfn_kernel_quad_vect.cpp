@@ -219,7 +219,9 @@ QuadrilateralKernel_PlanarVectorWS::QuadrilateralKernel_PlanarVectorWS():
 QuadrilateralKernel(),
 QuadrilateralPlanarKernel(),
 QuadrilateralKernel_Vector() {
-    up_green_func_.reset(new HelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new HelmgolzGreenFunc());
+	}
 }
 
 //virtual
@@ -237,7 +239,9 @@ QuadrilateralKernel_PlanarVectorSS::QuadrilateralKernel_PlanarVectorSS():
 QuadrilateralKernel(),
 QuadrilateralPlanarKernel(),
 QuadrilateralKernel_Vector() {
-    up_green_func_.reset(new GradHelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new GradHelmgolzGreenFunc());
+	}
 }
 
 //virtual
@@ -258,7 +262,9 @@ QuadrilateralKernel_CurvilinearVectorWS::QuadrilateralKernel_CurvilinearVectorWS
 QuadrilateralKernel(),
 QuadrilateralCurvilinearKernel(),
 QuadrilateralKernel_Vector() {
-    up_green_func_.reset(new HelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new HelmgolzGreenFunc());
+	}
 }
 
 //virtual
@@ -276,7 +282,9 @@ QuadrilateralKernel_CurvilinearVectorSS::QuadrilateralKernel_CurvilinearVectorSS
 QuadrilateralKernel(),
 QuadrilateralCurvilinearKernel(),
 QuadrilateralKernel_Vector() {
-    up_green_func_.reset(new GradHelmgolzGreenFunc());
+	if (nullptr == up_green_func_.get()) {
+		up_green_func_.reset(new GradHelmgolzGreenFunc());
+	}
 }
 
 //virtual

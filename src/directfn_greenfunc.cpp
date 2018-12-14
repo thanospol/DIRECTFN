@@ -142,7 +142,7 @@ User_GreenFunc::~User_GreenFunc() {
 dcomplex User_GreenFunc::genuine_value_(const double R) const noexcept {
 
 	/* Replace the code below with yours */
-	const dcomplex  G0 = 1.0 / (R*R);
+	const dcomplex  G0 = 1.0 / R;
 	return G0;
 }
 

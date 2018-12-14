@@ -112,7 +112,7 @@ using Directfn::DBL_EPSILON;
 	std::ofstream myfile;
 	myfile.open("Results_tri_vs_quad_ST.txt");
 
-	const int Counter = 30;
+	const int Counter = 25;
 
 	cout << "Convergence test starting ..." << endl;
 	for (int N = 1; N <= Counter; N++)
