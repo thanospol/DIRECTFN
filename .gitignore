@@ -7,3 +7,5 @@
 *.eps
 *.txt
 *.jpg
+examples/EuCap2017_Examples/c++/.ipynb_checkpoints/
+examples/Full_Paper_Examples/c++/.ipynb_checkpoints/
