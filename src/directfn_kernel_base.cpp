@@ -15,7 +15,8 @@ namespace Directfn {
 /////////////////////////////////////////////////////////////////////////////////
 
 AbstractKernel::AbstractKernel():
-up_green_func_(nullptr),
+//up_green_func_(nullptr),
+up_green_func_(new User_GreenFunc()),
 rp_crnt_{0.0, 0.0, 0.0},
 rq_crnt_{0.0, 0.0, 0.0},
 Rpq_{0.0, 0.0, 0.0} {
